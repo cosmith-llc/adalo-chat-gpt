@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, forwardRef } from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -10,14 +10,45 @@ import {
 import { ChatMessage } from "./ChatMessage";
 import { RealTimeChatProps } from "./generated";
 import { InputBox } from "./InputBox";
-import * as Ably from "ably";
+// import * as Ably from "ably";
+import axios from 'axios';
+import scrollToEnd from './scrollToEnd';
+
+const threadId = 'thread_rQGBVjd6zsELsBC1dh5I3Hqf';
+const file_id  = 'file-LgHJwvtNAfw9FJGbWQFpxT';
+const assistant_id = 'asst_PgMhvpZO4W8rat69Evo11yz5'
+
+// Get from Component properties
+const OPENAI_API_KEY = '';
+
+const headers = {
+  "Content-Type": "application/json",
+  "Authorization": `Bearer ${OPENAI_API_KEY}`,
+  "OpenAI-Beta": "assistants=v2"
+};
+
+const getLastMessage =  async () => await axios.get(`https://api.openai.com/v1/threads/${threadId}/messages`, {
+  method: 'GET',
+  headers: headers
+});
+/*
+const scrollToTheEnd = (flatList: { scrollToEnd: () => void; }) => {
+  flatList.scrollToEnd();
+}
+*/
+const convertMessages = (messages: { id: string; role: string; assistant_id: any; created_at: any; content: { text: { value: any; }; }[]; }[]) => {
+  return messages.reverse().map((message: {id: string; role: string; assistant_id: any; created_at: any; content: { text: { value: any; }; }[]; }) => ({
+    id: message.id,
+    role: message.role === 'user' ? 'user' : 'assistant',
+    message: message.content[0].text.value,
+    createdDate:  new Date(message.created_at)
+  }));
+};
 
 class RealTimeChat extends Component<
   RealTimeChatProps,
   {
     messages: any[];
-    ably?: Ably.Realtime;
-    channel?: Ably.Types.RealtimeChannelCallbacks;
     oneTimeUpdate: boolean;
   }
 > {
@@ -36,40 +67,88 @@ class RealTimeChat extends Component<
       oneTimeUpdate: (this.props.adaloMessages?.length || 0) > 0,
       messages: !!props.editor ? sampleMessages : this.props.adaloMessages?.map(message => message.messageData) || [],
     };
-    this.onMessage = this.onMessage.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
   }
-  onMessage(message: Ably.Types.Message) {
-    this.setState((state) => {
-      return { messages: [message.data, ...state.messages] };
-    });
-  }
-  sendMessage(message: string) {
-    if (this.state.channel && this.props.subscriptionKey) {
-      this.state.channel.publish(this.props.subscriptionKey, {
-        message,
-        senderId: this.props.clientId,
-        createdDate: new Date().toISOString()
+  async sendMessage(message: string) {
+    if (message) {
+      const data = {
+        "role": "user",
+        "content": message,
+        "attachments": [ { "file_id": file_id, "tools": [{ "type": "file_search"}] }]
+      };    
+      const urlSendMessage = `https://api.openai.com/v1/threads/${threadId}/messages`;
+      await axios.post(urlSendMessage, data, { headers });
+
+      const runResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({ assistant_id, stream: true }),
       });
+  
+      if (!runResponse.ok) {
+        throw new Error(`HTTP error! status: ${runResponse.status}`);
+      }
+  
+      if (runResponse && runResponse.body) {
+        const reader = runResponse.body.getReader();
+        const decoder = new TextDecoder();
+        const handleStreamedResponse =  async (value: any) => {
+          const lines = decoder.decode(value).split('\n');
+          for (const line of lines) {
+            if (line.trim().startsWith('data:')) {
+              const data = line.trim().slice(5).trim();
+              if (data === '[DONE]') {
+                console.log('Done:', true);
+                const lastMessage = await getLastMessage();
+                const messages = convertMessages(lastMessage.data.data);
+                this.setState({ messages: messages || []})
+              } else {
+                try {
+                  console.log('before end', data);
+                  const event = JSON.parse(data);
+                  console.log('event', event);
+                } catch (error) {
+                  console.error('Error parsing streamed response:', error);
+                }
+              }
+            }
+          }
+        };
+    
+        const readLoop = async () => {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) {
+              break;
+            }
+            await handleStreamedResponse(value);
+          }
+        };
+    
+        readLoop();
+      }
+  
+
+
 			if (this.props.onSend) {
 				this.props.onSend(message)
 			}
     }
   }
-  componentDidMount() {
+  async componentDidMount() {
     if (!this.props.editor) {
-      const AblyRealtime = new Ably.Realtime({
-        key: this.props.apiKey,
-        clientId: this.props.clientId,
-      });
-      this.setState({ ably: AblyRealtime });
-      if (this.props.channelName) {
-        const channel = AblyRealtime.channels.get(this.props.channelName);
-				this.setState({ channel });
-        if (channel && this.props.subscriptionKey) {
-          channel.subscribe(this.props.subscriptionKey, this.onMessage);
-        }
-      }
+        console.log('componentDidMount:');
+        const lastMessage = await getLastMessage();
+        console.log('lastMessage', lastMessage);
+        console.log('lastMessage', lastMessage.data);
+        // this.setState({ messages: this.props.adaloMessages?.map(message => message.messageData) || []})
+        const messages = convertMessages(lastMessage.data.data);
+        this.setState({ messages: messages || []})
+        const element = this.refs.flatList;
+        setTimeout(() => scrollToEnd(element), 150);
+        //scrollToTheEnd(element);
+        //scrollToTheEnd(element);
+
     }
   }
   componentDidUpdate(prevProps: RealTimeChatProps) {
@@ -78,33 +157,11 @@ class RealTimeChat extends Component<
       if (this.state.messages.length === 0 && (this.props.adaloMessages || [])?.length > 0) {
         this.setState({ messages: this.props.adaloMessages?.map(message => message.messageData) || []})
       }
-      if (
-        this.state.channel &&
-        this.props.subscriptionKey &&
-        this.props.subscriptionKey !== prevProps.subscriptionKey
-      ) {
-        this.state.channel.unsubscribe(
-          prevProps.subscriptionKey,
-          this.onMessage
-        );
-        this.state.channel.subscribe(
-          this.props.subscriptionKey,
-          this.onMessage
-        );
-      }
     }
   }
   componentWillUnmount() {
     if (!this.props.editor) {
-      if (this.state.channel) {
-        this.state.channel.unsubscribe(
-          this.props.subscriptionKey,
-          this.onMessage
-        );
-      }
-      if (this.state.ably) {
-        this.state.ably.close();
-      }
+      //
     }
   }
   render() {
@@ -122,11 +179,11 @@ class RealTimeChat extends Component<
           }}
         >
           <FlatList
+            ref="flatList"
             style={{ flex: 1 }}
             data={this.state.messages}
             renderItem={({ item }) => <ChatMessage receiverStyle={this.props.receivedChatWindow} senderStyle={this.props.senderChatWindow} myId={this.props.clientId || ''} message={item} />}
             keyExtractor={(item) => `item!.id`}
-            inverted
           />
           <InputBox inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={this.sendMessage} />
         </View>

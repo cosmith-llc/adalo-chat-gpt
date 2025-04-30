@@ -4,7 +4,7 @@ import { IReceivedChatWindow, ISenderChatWindow } from "./generated";
 
 export type ChatMessageProps = {
   message: {
-    senderId: string,
+    role: string,
     message: string,
     createdDate: string
   };
@@ -14,9 +14,9 @@ export type ChatMessageProps = {
 };
 
 export const ChatMessage = (props: ChatMessageProps) => {   
-  const { message, myId } = props;
+  const { message } = props;
   const isMyMessage = () => {
-    return message.senderId === myId;
+    return message.role === 'user';
   };
   return (
     <View style={styles.container}>

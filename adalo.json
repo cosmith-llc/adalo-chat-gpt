@@ -1,0 +1,12 @@
+{
+  "author": "Steven McKeown",
+  "description": "Real-Time chat system for Adalo",
+  "logo": "./example-logo.png",
+  "displayName": "Adalo Real Time Chat",
+  "components": [
+    {
+      "name": "RealTimeChat",
+      "manifest": "./src/components/RealTimeChat/manifest.json"
+    }
+  ]
+}

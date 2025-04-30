@@ -1,7 +1,7 @@
 {
-  "name": "adalo-real-time-chat",
+  "name": "@cosmith/adalo-chat-gpt",
   "description": "Real-Time chat system for Adalo",
-  "version": "0.0.21",
+  "version": "0.0.1",
   "main": "index.js",
   "license": "ISC",
   "author": "Steven McKeown",
@@ -11,18 +11,8 @@
     "login": "adalo login",
     "publish": "adalo publish"
   },
-  "adalo": {
-    "logo": "./example-logo.png",
-    "displayName": "Adalo Real Time Chat",
-    "components": [
-      {
-        "name": "RealTimeChat",
-        "manifest": "./src/components/RealTimeChat/manifest.json"
-      }
-    ]
-  },
   "devDependencies": {
-    "@adalo/cli": "^0.0.44",
+    "@adalo/cli": "^1.0.2",
     "@types/react": "^17.0.38",
     "@types/react-native": "^0.66.11",
     "react": "^16.9.0",
@@ -35,7 +25,7 @@
     "@ably-labs/react-hooks": "^1.1.5",
     "@protonapp/material-components": "^0.9.3",
     "@protonapp/react-native-material-ui": "^2.0.6",
-    "ably": "^1.2.15",
+    "axios": "^1.9.0",
     "react-native-vector-icons": "^9.0.0"
   }
 }
