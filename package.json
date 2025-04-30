@@ -22,7 +22,6 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
-    "@ably-labs/react-hooks": "^1.1.5",
     "@protonapp/material-components": "^0.9.3",
     "@protonapp/react-native-material-ui": "^2.0.6",
     "axios": "^1.9.0",
