@@ -13,7 +13,7 @@ export type ChatMessageProps = {
   receiverStyle?: IReceivedChatWindow
 };
 
-export const ChatMessage = (props: ChatMessageProps) => {   
+export const ChatMessage = (props: ChatMessageProps) => {
   const { message } = props;
   const isMyMessage = () => {
     return message.role === 'user';
@@ -28,7 +28,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
             backgroundColor: isMyMessage() ? props.senderStyle?.backgroundColor : props.receiverStyle?.backgroundColor,
             marginLeft: isMyMessage() ? props.senderStyle?.marginLeft : props.receiverStyle?.marginLeft,
             marginRight: isMyMessage() ? props.senderStyle?.marginRight : props.receiverStyle?.marginRight,
-            padding: isMyMessage() ? props.senderStyle?.padding : props.receiverStyle?.padding
+            padding: isMyMessage() ? props.senderStyle?.padding : props.receiverStyle?.padding,
           },
         ]}
       >
@@ -46,6 +46,10 @@ const styles = StyleSheet.create({
   },
   messageBox: {
     padding: 10,
+    backgroundСolor: "#303030",
+    borderColor: "#ffffff26",
+    borderWidth: 1,
+    borderRadius: 28,
   },
   name: {
     fontWeight: "bold",
@@ -53,6 +57,7 @@ const styles = StyleSheet.create({
   },
   message: {
     width: "100%",
+    color: '#fff',
   },
   media: {
     width: "100%",

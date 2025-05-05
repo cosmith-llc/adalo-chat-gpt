@@ -15,7 +15,7 @@ export const InputBox = ({ sendMessage, buttonStyles, inputStyle }: InputBoxProp
   const [myUserId, setMyUserId] = useState<string | null>(null);
 
   const onPress = () => {
-    if (!sending && message) { 
+    if (!sending && message) {
       setSending(true)
       sendMessage(message)
       setSending(false)
@@ -24,13 +24,15 @@ export const InputBox = ({ sendMessage, buttonStyles, inputStyle }: InputBoxProp
   };
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.mainContainer, {
-        borderColor: inputStyle?.borderColor,
-        backgroundColor: inputStyle?.backgroundColor,
-        borderWidth: inputStyle?.borderWidth,
-        borderRadius: inputStyle?.borderRadius
-      }]}>
+    <View style={[styles.container,
+    {
+      borderColor: inputStyle?.borderColor,
+      backgroundColor: inputStyle?.backgroundColor,
+      borderWidth: inputStyle?.borderWidth,
+      borderRadius: inputStyle?.borderRadius
+    }
+    ]}>
+      <View style={styles.mainContainer}>
         <TextInput
           placeholder={"Type Message"}
           multiline
@@ -42,13 +44,13 @@ export const InputBox = ({ sendMessage, buttonStyles, inputStyle }: InputBoxProp
       </View>
 
       <TouchableOpacity onPress={onPress}>
-        
+
         <View style={styles.buttonContainer}>
           {
             sending && buttonStyles?.showSendingIndicator ? (
               <ActivityIndicator size="small" color={buttonStyles?.indicatorColor} />
-              ) : (
-                <Icon iconName={buttonStyles?.buttonIcon || "send"} iconColor={buttonStyles?.buttonIconColor} />
+            ) : (
+              <Icon iconName={buttonStyles?.buttonIcon || "send"} iconColor={buttonStyles?.buttonIconColor || styles.icons} />
             )
           }
         </View>
@@ -62,7 +64,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     margin: 10,
+    padding: 12,
+    backgroundColor: "#414141",
+    color: "#afafaf",
     alignItems: "center",
+    borderColor: "#ffffff26",
+    borderWidth: 1,
+    borderRadius: 28,
   },
   mainContainer: {
     flexDirection: "row",
@@ -70,10 +78,14 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 10,
     alignItems: "center",
+    backgroundСolor: "#414141",
   },
   textInput: {
     flex: 1,
     padding: 5,
+    fontSize: '1rem',
+    color: "#afafaf",
+    backgroundСolor: "#303030",
   },
   buttonContainer: {
     borderRadius: 25,
@@ -82,6 +94,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
+    fill: "#000",
+    backgroundColor: "#fff",
   },
   icons: {
     marginHorizontal: 5,
