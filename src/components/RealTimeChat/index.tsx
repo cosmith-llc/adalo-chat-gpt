@@ -183,7 +183,7 @@ class RealTimeChat extends Component<
               ref="flatList"
               style={{ flex: 1 }}
               data={this.state.messages}
-              renderItem={({ item }) => <ChatMessage receiverStyle={this.props.receivedChatWindow} senderStyle={this.props.senderChatWindow} myId={this.props.clientId || ''} message={item} />}
+              renderItem={({ item }) => <ChatMessage isShowDataTime={this.props.isShowDataTime} receiverStyle={this.props.receivedChatWindow} senderStyle={this.props.senderChatWindow} myId={this.props.clientId || ''} message={item} />}
               keyExtractor={(item) => `item!.id`}
             />
             <InputBox inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={this.sendMessage} />

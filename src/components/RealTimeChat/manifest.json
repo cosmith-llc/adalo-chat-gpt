@@ -8,6 +8,12 @@
   "icon": "./example-thumbnail.png",
   "props": [
     {
+      "name": "isShowDataTime",
+      "displayName": "Show data and time",
+      "type": "boolean",
+      "default": true
+    },
+    {
       "name": "adaloMessages",
       "displayName": "List of Messages",
       "type": "list"

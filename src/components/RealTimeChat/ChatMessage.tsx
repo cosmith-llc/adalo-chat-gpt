@@ -11,10 +11,11 @@ export type ChatMessageProps = {
   myId: String;
   senderStyle?: ISenderChatWindow
   receiverStyle?: IReceivedChatWindow
+  isShowDataTime: isShowDataTime
 };
 
 export const ChatMessage = (props: ChatMessageProps) => {
-  const { message } = props;
+  const { message, isShowDataTime } = props;
   const isMyMessage = () => {
     return message.role === 'user';
   };
@@ -34,7 +35,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
       >
 
         <Text style={[styles.message, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}>{message.message}</Text>
-        <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}>{new Date(message.createdDate).toLocaleDateString()} {new Date(message.createdDate).toLocaleTimeString()}</Text>
+        {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}>{new Date(message.createdDate).toLocaleDateString()} {new Date(message.createdDate).toLocaleTimeString()}</Text> : ''}
       </View>
     </View>
   );
