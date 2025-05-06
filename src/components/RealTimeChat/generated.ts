@@ -46,6 +46,11 @@ export interface ISendButton {
   indicatorColor?: string;
 }
 
+export interface IChatGptIcon {
+  chatIcon?: string;
+  chatIconColor?: string;
+}
+
 export interface IInputStyle {
   borderColor?: string;
   borderWidth?: number;
@@ -79,6 +84,7 @@ export interface IAdaloMessages {
 
 export interface RealTimeChatProps {
   sendButton?: ISendButton;
+  chatGptIcon?: IChatGptIcon;
   inputStyle?: IInputStyle;
   senderChatWindow?: ISenderChatWindow;
   receivedChatWindow?: IReceivedChatWindow;

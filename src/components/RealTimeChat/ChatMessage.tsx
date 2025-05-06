@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Dimensions, View, Text, Image } from "react-native";
-import { IReceivedChatWindow, ISenderChatWindow } from "./generated";
+import { IChatGptIcon, IReceivedChatWindow, ISenderChatWindow } from "./generated";
+import Icon from '@protonapp/material-components/src/Icon'
 
 export type ChatMessageProps = {
   message: {
@@ -9,13 +10,14 @@ export type ChatMessageProps = {
     createdDate: string
   };
   myId: String;
-  senderStyle?: ISenderChatWindow
-  receiverStyle?: IReceivedChatWindow
-  isShowDataTime: isShowDataTime
+  senderStyle?: ISenderChatWindow;
+  receiverStyle?: IReceivedChatWindow;
+  isShowDataTime?: boolean;
+  gptIcon?: IChatGptIcon;
 };
 
 export const ChatMessage = (props: ChatMessageProps) => {
-  const { message, isShowDataTime } = props;
+  const { message, isShowDataTime, gptIcon } = props;
   const isMyMessage = () => {
     return message.role === 'user';
   };
@@ -33,7 +35,9 @@ export const ChatMessage = (props: ChatMessageProps) => {
           },
         ]}
       >
-
+        <View style={{ marginBottom: 5, marginTop: 5 }}>
+          {isMyMessage() ? "" : <Icon iconName={gptIcon?.chatIcon || "chat"} iconColor={gptIcon?.chatIconColor || '#fff'} />}
+        </View>
         <Text style={[styles.message, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}>{message.message}</Text>
         {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}>{new Date(message.createdDate).toLocaleDateString()} {new Date(message.createdDate).toLocaleTimeString()}</Text> : ''}
       </View>

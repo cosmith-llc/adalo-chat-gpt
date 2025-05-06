@@ -85,6 +85,23 @@
       ]
     },
     {
+      "name": "chatGptIcon",
+      "displayName": "Chat GPT Icon",
+      "props": [
+        {
+          "name": "chatIcon",
+          "displayName": "Chat Icon",
+          "type": "icon",
+          "defaultValue": "robot"
+        },
+        {
+          "name": "chatIconColor",
+          "displayName": "Chat Icon Color",
+          "type": "color"
+        }
+      ]
+    },
+    {
       "name": "sendButton",
       "displayName": "Send Button",
       "props": [
