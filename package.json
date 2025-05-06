@@ -1,5 +1,5 @@
 {
-  "name": "@cosmith/adalo-chat-gpt",
+  "name": "@cosmith/adalo-chat-gpt-tst",
   "description": "Real-Time chat system for Adalo",
   "version": "0.0.1",
   "main": "index.js",

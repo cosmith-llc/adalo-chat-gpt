@@ -1,12 +1,14 @@
 {
-  "author": "Steven McKeown",
-  "description": "Real-Time chat system for Adalo",
+  "author": "cosmith llc",
+  "description": "ChatGPT component for Adalo",
   "logo": "./example-logo.png",
-  "displayName": "Adalo Real Time Chat",
+  "displayName": "ChatGPT component for Adalo",
   "components": [
     {
       "name": "RealTimeChat",
       "manifest": "./src/components/RealTimeChat/manifest.json"
     }
-  ]
+  ],
+  "demoAppURL": "https://previewer.adalo.com/f1ab41a7-1cee-4909-ac6e-8d8673c4c7f6",
+  "supportURL": "https://cosmith.io"
 }
