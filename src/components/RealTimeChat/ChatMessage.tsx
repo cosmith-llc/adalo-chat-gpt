@@ -9,9 +9,9 @@ export type ChatMessageProps = {
     createdDate: string
   };
   myId: String;
-  senderStyle?: ISenderChatWindow
-  receiverStyle?: IReceivedChatWindow
-  isShowDataTime: isShowDataTime
+  senderStyle?: ISenderChatWindow;
+  receiverStyle?: IReceivedChatWindow;
+  isShowDataTime: boolean;
 };
 
 export const ChatMessage = (props: ChatMessageProps) => {
