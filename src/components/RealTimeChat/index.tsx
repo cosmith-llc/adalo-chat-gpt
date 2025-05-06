@@ -14,9 +14,9 @@ import { InputBox } from "./InputBox";
 import axios from 'axios';
 import scrollToEnd from './scrollToEnd';
 
-const threadId = 'thread_rQGBVjd6zsELsBC1dh5I3Hqf';
-const file_id = 'file-LgHJwvtNAfw9FJGbWQFpxT';
-const assistant_id = 'asst_PgMhvpZO4W8rat69Evo11yz5'
+const threadId = 'thread_MekGS4GpYZh3RxmiFxoHXLMW';
+const file_id = 'file-Fk9jkjU1wGHZy9f9eESLuP';
+const assistant_id = 'asst_uaNZI0eBMf60KvP2ATOonMaW'
 
 // Get from Component properties
 const OPENAI_API_KEY = '';
@@ -27,6 +27,7 @@ const headers = {
   "OpenAI-Beta": "assistants=v2"
 };
 
+console.log(`https://api.openai.com/v1/threads/${threadId}/messages`, threadId);
 const getLastMessage = async () => await axios.get(`https://api.openai.com/v1/threads/${threadId}/messages`, {
   method: 'GET',
   headers: headers
