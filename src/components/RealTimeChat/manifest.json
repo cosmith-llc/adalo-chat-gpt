@@ -85,19 +85,32 @@
       ]
     },
     {
-      "name": "chatGptIcon",
-      "displayName": "Chat GPT Icon",
+      "name": "urlAvatar",
+      "displayName": "Url Avatar Img",
       "props": [
         {
-          "name": "chatIcon",
-          "displayName": "Chat Icon",
-          "type": "icon",
-          "defaultValue": "robot"
+          "name": "chatUrl",
+          "displayName": "Chat Url",
+          "type": "string",
+          "defaultValue": ""
         },
         {
-          "name": "chatIconColor",
-          "displayName": "Chat Icon Color",
-          "type": "color"
+          "name": "isShowChatUrl",
+          "displayName": "Show Chat Url",
+          "type": "boolean",
+          "defaultValue": true
+        },
+        {
+          "name": "userUrl",
+          "displayName": "User Url",
+          "type": "string",
+          "defaultValue": ""
+        },
+        {
+          "name": "isShowUserUrl",
+          "displayName": "Show USer Url",
+          "type": "boolean",
+          "defaultValue": true
         }
       ]
     },

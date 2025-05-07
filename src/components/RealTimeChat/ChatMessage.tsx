@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Dimensions, View, Text, Image } from "react-native";
-import { IChatGptIcon, IReceivedChatWindow, ISenderChatWindow } from "./generated";
+import { IUrlAvatar, IReceivedChatWindow, ISenderChatWindow } from "./generated";
 import Icon from '@protonapp/material-components/src/Icon'
 import Markdown from "react-native-markdown-display";
 
@@ -14,16 +14,37 @@ export type ChatMessageProps = {
   senderStyle?: ISenderChatWindow;
   receiverStyle?: IReceivedChatWindow;
   isShowDataTime?: boolean;
-  gptIcon?: IChatGptIcon;
+  urlAvatar?: IUrlAvatar;
 };
 
 export const ChatMessage = (props: ChatMessageProps) => {
-  const { message, isShowDataTime, gptIcon } = props;
+  const { message, isShowDataTime, urlAvatar } = props;
   const isMyMessage = () => {
     return message.role === 'user';
   };
+
+  const showUrl = () => {
+    if (isMyMessage() && urlAvatar?.isShowUserUrl) {
+      return (
+        <View style={styles.imgContainer}>
+          <Image source={{ uri: urlAvatar?.userUrl }} style={styles.imgAvatar} />
+        </View>
+      )
+
+    }
+    if (!isMyMessage() && urlAvatar?.isShowChatUrl) {
+      return (
+        <View style={styles.imgContainer}>
+          <Image source={{ uri: urlAvatar?.chatUrl }} style={styles.imgAvatar} />
+        </View>
+      )
+    }
+    return ''
+  }
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { alignItems: isMyMessage() ? 'flex-end' : "flex-start" }]}>
+      {showUrl()}
       <View
         style={[
           styles.messageBox,
@@ -36,9 +57,6 @@ export const ChatMessage = (props: ChatMessageProps) => {
           },
         ]}
       >
-        <View style={{ marginBottom: 5, marginTop: 5 }}>
-          {isMyMessage() ? "" : <Icon iconName={gptIcon?.chatIcon || "chat"} iconColor={gptIcon?.chatIconColor || '#fff'} />}
-        </View>
         <Text style={[styles.message, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}><Markdown>{message.message}</Markdown></Text>
         {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textDataColor : props.receiverStyle?.textDataColor }]}>{new Date(message.createdDate).toLocaleDateString()} {new Date(message.createdDate).toLocaleTimeString()}</Text> : ''}
       </View>
@@ -75,4 +93,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "gray",
   },
+  imgContainer: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#eee'
+  },
+  imgAvatar: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  }
 });
