@@ -43,7 +43,11 @@ export const InputBox = ({ sendMessage, buttonStyles, inputStyle }: InputBoxProp
         />
       </View>
 
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={onPress} disabled={message.trim() === '' || sending}
+        style={[
+          styles.buttonContainer,
+          (message.trim() === '' || sending) && { opacity: 0.5 } // визуально делаем неактивной
+        ]}>
 
         <View style={styles.buttonContainer}>
           {
@@ -83,9 +87,9 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     padding: 5,
-    fontSize: '1rem',
+    fontSize: 16,
     color: "#afafaf",
-    backgroundСolor: "#303030",
+    textAlignVertical: 'center',
   },
   buttonContainer: {
     borderRadius: 25,
