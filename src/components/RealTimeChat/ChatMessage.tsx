@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Dimensions, View, Text, Image } from "react-native";
 import { IChatGptIcon, IReceivedChatWindow, ISenderChatWindow } from "./generated";
 import Icon from '@protonapp/material-components/src/Icon'
+import Markdown from "react-native-markdown-display";
 
 export type ChatMessageProps = {
   message: {
@@ -38,7 +39,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
         <View style={{ marginBottom: 5, marginTop: 5 }}>
           {isMyMessage() ? "" : <Icon iconName={gptIcon?.chatIcon || "chat"} iconColor={gptIcon?.chatIconColor || '#fff'} />}
         </View>
-        <Text style={[styles.message, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}>{message.message}</Text>
+        <Text style={[styles.message, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}><Markdown>{message.message}</Markdown></Text>
         {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}>{new Date(message.createdDate).toLocaleDateString()} {new Date(message.createdDate).toLocaleTimeString()}</Text> : ''}
       </View>
     </View>
