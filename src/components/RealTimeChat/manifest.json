@@ -182,6 +182,11 @@
           "type": "color"
         },
         {
+          "name": "textDataColor",
+          "displayName": "Text Data Color",
+          "type": "color"
+        },
+        {
           "name": "borderRadius",
           "displayName": "Border Radius",
           "type": "number",
@@ -238,6 +243,11 @@
         {
           "name": "textColor",
           "displayName": "Text Color",
+          "type": "color"
+        },
+        {
+          "name": "textDataColor",
+          "displayName": "Text Data Color",
           "type": "color"
         },
         {

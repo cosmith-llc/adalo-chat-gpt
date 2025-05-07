@@ -40,7 +40,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
           {isMyMessage() ? "" : <Icon iconName={gptIcon?.chatIcon || "chat"} iconColor={gptIcon?.chatIconColor || '#fff'} />}
         </View>
         <Text style={[styles.message, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}><Markdown>{message.message}</Markdown></Text>
-        {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}>{new Date(message.createdDate).toLocaleDateString()} {new Date(message.createdDate).toLocaleTimeString()}</Text> : ''}
+        {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textDataColor : props.receiverStyle?.textDataColor }]}>{new Date(message.createdDate).toLocaleDateString()} {new Date(message.createdDate).toLocaleTimeString()}</Text> : ''}
       </View>
     </View>
   );

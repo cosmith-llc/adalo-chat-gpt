@@ -61,6 +61,7 @@ export interface IInputStyle {
 export interface ISenderChatWindow {
   backgroundColor?: string;
   textColor?: string;
+  textDataColor?: string;
   borderRadius?: number;
   marginLeft?: number;
   marginRight?: number;
@@ -70,6 +71,7 @@ export interface ISenderChatWindow {
 export interface IReceivedChatWindow {
   backgroundColor?: string;
   textColor?: string;
+  textDataColor?: string;
   borderRadius?: number;
   marginLeft?: number;
   marginRight?: number;
