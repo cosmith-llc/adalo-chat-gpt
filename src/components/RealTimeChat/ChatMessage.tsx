@@ -23,10 +23,14 @@ export const ChatMessage = (props: ChatMessageProps) => {
     return message.role === 'user';
   };
 
-  const showUrl = () => {
+  const ShowUrl = () => {
     if (isMyMessage() && urlAvatar?.isShowUserUrl) {
       return (
-        <View style={styles.imgContainer}>
+        <View style={[styles.imgContainer, {
+          width: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar * 2 : 20,
+          height: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar * 2 : 20,
+          borderRadius: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar : 10,
+        }]}>
           <Image source={{ uri: urlAvatar?.userUrl }} style={styles.imgAvatar} />
         </View>
       )
@@ -34,17 +38,25 @@ export const ChatMessage = (props: ChatMessageProps) => {
     }
     if (!isMyMessage() && urlAvatar?.isShowChatUrl) {
       return (
-        <View style={styles.imgContainer}>
+        <View style={[styles.imgContainer, {
+          width: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar * 2 : 20,
+          height: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar * 2 : 20,
+          borderRadius: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar : 10,
+        }]}>
           <Image source={{ uri: urlAvatar?.chatUrl }} style={styles.imgAvatar} />
         </View>
       )
     }
-    return ''
+    return <></>
   }
 
   return (
-    <View style={[styles.container, { alignItems: isMyMessage() ? 'flex-end' : "flex-start" }]}>
-      {showUrl()}
+    <View style={[styles.container, {
+      flexDirection: isMyMessage() ? "row-reverse" : "row",
+      // alignItems: isMyMessage() ? 'flex-end' : "flex-start",
+      // flexDirection: isMyMessage() ? "row-reverse" : "row",
+    }]}>
+      <ShowUrl />
       <View
         style={[
           styles.messageBox,
@@ -63,7 +75,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
         <Text style={[styles.message, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}><Markdown>{message.message}</Markdown></Text>
         {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textDataColor : props.receiverStyle?.textDataColor }]}>{new Date(message.createdDate).toLocaleDateString()} {new Date(message.createdDate).toLocaleTimeString()}</Text> : ''}
       </View>
-    </View>
+    </View >
   );
 };
 
@@ -72,6 +84,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   messageBox: {
+    maxWidth: "70%",
     padding: 10,
     backgroundСolor: "#303030",
     borderColor: "#ffffff26",

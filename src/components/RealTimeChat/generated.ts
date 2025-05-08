@@ -51,6 +51,7 @@ export interface IUrlAvatar {
   isShowChatUrl?: boolean;
   userUrl?: string;
   isShowUserUrl?: boolean;
+  radiusAvatar?: number;
 }
 
 export interface IInputStyle {

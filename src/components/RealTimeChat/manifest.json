@@ -93,25 +93,36 @@
           "name": "chatUrl",
           "displayName": "Chat Url",
           "type": "string",
-          "defaultValue": ""
+          "default": ""
         },
         {
           "name": "isShowChatUrl",
           "displayName": "Show Chat Url",
           "type": "boolean",
-          "defaultValue": true
+          "default": true
         },
         {
           "name": "userUrl",
           "displayName": "User Url",
           "type": "string",
-          "defaultValue": ""
+          "default": ""
         },
         {
           "name": "isShowUserUrl",
           "displayName": "Show USer Url",
           "type": "boolean",
-          "defaultValue": true
+          "default": true
+        },
+        {
+          "name": "radiusAvatar",
+          "displayName": "Radius Avatar",
+          "type": "number",
+          "default": 10,
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 100
+          }
         }
       ]
     },
@@ -239,7 +250,7 @@
           "name": "marginLeft",
           "displayName": "Left Margin",
           "type": "number",
-          "default": 50,
+          "default": 5,
           "control": {
             "type": "slider",
             "min": 0,
@@ -250,7 +261,7 @@
           "name": "marginRight",
           "displayName": "Right Margin",
           "type": "number",
-          "default": 0,
+          "default": 5,
           "control": {
             "type": "slider",
             "min": 0,
@@ -335,7 +346,7 @@
           "name": "marginLeft",
           "displayName": "Left Margin",
           "type": "number",
-          "default": 10,
+          "default": 5,
           "control": {
             "type": "slider",
             "min": 0,
