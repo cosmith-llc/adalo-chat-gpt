@@ -14,23 +14,23 @@ import { InputBox } from "./InputBox";
 import axios from 'axios';
 import scrollToEnd from './scrollToEnd';
 
-const threadId = 'thread_MekGS4GpYZh3RxmiFxoHXLMW';
-const file_id = 'file-Fk9jkjU1wGHZy9f9eESLuP';
-const assistant_id = 'asst_uaNZI0eBMf60KvP2ATOonMaW'
+// const threadId = 'thread_MekGS4GpYZh3RxmiFxoHXLMW';
+// const file_id = 'file-Fk9jkjU1wGHZy9f9eESLuP';
+// const assistant_id = 'asst_uaNZI0eBMf60KvP2ATOonMaW'
 
 // Get from Component properties
 const OPENAI_API_KEY = '';
 
-const headers = {
+const headers = (API_KEY) => ({
   "Content-Type": "application/json",
-  "Authorization": `Bearer ${OPENAI_API_KEY}`,
+  "Authorization": `Bearer ${API_KEY}`,
   "OpenAI-Beta": "assistants=v2"
-};
+});
 
-console.log(`https://api.openai.com/v1/threads/${threadId}/messages`, threadId);
-const getLastMessage = async () => await axios.get(`https://api.openai.com/v1/threads/${threadId}/messages`, {
+// console.log(`https://api.openai.com/v1/threads/${threadId}/messages`, threadId);
+const getLastMessage = async (API_KEY, thread_Id) => await axios.get(`https://api.openai.com/v1/threads/${thread_Id}/messages`, {
   method: 'GET',
-  headers: headers
+  headers: headers(API_KEY)
 });
 /*
 const scrollToTheEnd = (flatList: { scrollToEnd: () => void; }) => {
@@ -70,19 +70,20 @@ class RealTimeChat extends Component<
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
-  async sendMessage(message: string) {
+  async sendMessage(API_KEY: string, thread_Id: string, file_id, message: string) {
     if (message) {
       const data = {
         "role": "user",
         "content": message,
         "attachments": [{ "file_id": file_id, "tools": [{ "type": "file_search" }] }]
       };
-      const urlSendMessage = `https://api.openai.com/v1/threads/${threadId}/messages`;
-      await axios.post(urlSendMessage, data, { headers });
+      const urlSendMessage = `https://api.openai.com/v1/threads/${thread_Id}/messages`;
+      //@ts-ignore
+      await axios.post(urlSendMessage, data, headers(API_KEY));
 
-      const runResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
+      const runResponse = await fetch(`https://api.openai.com/v1/threads/${thread_Id}/runs`, {
         method: 'POST',
-        headers: headers,
+        headers: headers(API_KEY),
         body: JSON.stringify({ assistant_id, stream: true }),
       });
 
@@ -100,7 +101,7 @@ class RealTimeChat extends Component<
               const data = line.trim().slice(5).trim();
               if (data === '[DONE]') {
                 console.log('Done:', true);
-                const lastMessage = await getLastMessage();
+                const lastMessage = await getLastMessage(API_KEY, thread_Id);
                 const messages = convertMessages(lastMessage.data.data);
                 this.setState({ messages: messages || [] })
               } else {
@@ -139,7 +140,8 @@ class RealTimeChat extends Component<
   async componentDidMount() {
     if (!this.props.editor) {
       console.log('componentDidMount:');
-      const lastMessage = await getLastMessage();
+      const { apiKey, threadId } = this.props;
+      const lastMessage = await getLastMessage(apiKey, threadId);
       console.log('lastMessage', lastMessage);
       console.log('lastMessage', lastMessage.data);
       // this.setState({ messages: this.props.adaloMessages?.map(message => message.messageData) || []})
@@ -167,6 +169,7 @@ class RealTimeChat extends Component<
   }
   render() {
     console.log(this.props)
+    const { apiKey, threadId, fileId } = this.props;
     return (
       <View style={{ backgroundColor: this.props.backgroundColor, flex: 1 }}>
         <KeyboardAvoidingView
@@ -187,7 +190,7 @@ class RealTimeChat extends Component<
               renderItem={({ item }) => <ChatMessage isShowDataTime={this.props.isShowDataTime} receiverStyle={this.props.receivedChatWindow} senderStyle={this.props.senderChatWindow} myId={this.props.clientId || ''} message={item} />}
               keyExtractor={(item) => `item!.id`}
             />
-            <InputBox inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={this.sendMessage} />
+            <InputBox inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={ (message) => this.sendMessage(apiKey || "", threadId || "", fileId, message)} />
           </View>
         </KeyboardAvoidingView>
       </View>
