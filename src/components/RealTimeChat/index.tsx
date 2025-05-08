@@ -14,10 +14,6 @@ import { InputBox } from "./InputBox";
 import axios from 'axios';
 import scrollToEnd from './scrollToEnd';
 
-// const threadId = 'thread_MekGS4GpYZh3RxmiFxoHXLMW';
-// const file_id = 'file-Fk9jkjU1wGHZy9f9eESLuP';
-// const assistant_id = 'asst_uaNZI0eBMf60KvP2ATOonMaW'
-
 // Get from Component properties
 const OPENAI_API_KEY = '';
 
