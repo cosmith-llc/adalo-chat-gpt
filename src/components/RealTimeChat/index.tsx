@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Text,
+  ActivityIndicator,
   View,
   StyleSheet,
 } from "react-native";
@@ -50,6 +51,7 @@ class RealTimeChat extends Component<
   {
     messages: any[];
     oneTimeUpdate: boolean;
+    updateList: boolean
   }
 > {
   constructor(props: RealTimeChatProps) {
@@ -66,11 +68,15 @@ class RealTimeChat extends Component<
     this.state = {
       oneTimeUpdate: (this.props.adaloMessages?.length || 0) > 0,
       messages: !!props.editor ? sampleMessages : this.props.adaloMessages?.map(message => message.messageData) || [],
+      updateList: false
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
   async sendMessage(message: string) {
     if (message) {
+      this.setState({ messages: [...this.state.messages, { message: message, role: 'user', createdDate: new Date() }] })
+      this.setState({ updateList: true })
+      setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
       const data = {
         "role": "user",
         "content": message,
@@ -102,6 +108,8 @@ class RealTimeChat extends Component<
                 const lastMessage = await getLastMessage();
                 const messages = convertMessages(lastMessage.data.data);
                 this.setState({ messages: messages || [] })
+                setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
+                this.setState({ updateList: false })
               } else {
                 try {
                   console.log('before end', data);
@@ -145,7 +153,7 @@ class RealTimeChat extends Component<
       const messages = convertMessages(lastMessage.data.data);
       this.setState({ messages: messages || [] })
       const element = this.refs.flatList;
-      setTimeout(() => scrollToEnd(element), 150);
+      setTimeout(() => scrollToEnd(element, this.state.messages.length), 150);
       //scrollToTheEnd(element);
       //scrollToTheEnd(element);
 
@@ -167,17 +175,17 @@ class RealTimeChat extends Component<
   render() {
     console.log(this.props)
     return (
-      <View style={{ backgroundColor: this.props.backgroundColor, flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <View
-            style={{
+            style={[styles.container, {
               height: this.props._height,
               width: this.props._width,
-              backgroundColor: "#303030"
-            }}
+              backgroundColor: this.props.backgroundColor
+            }]}
           >
             <FlatList
               ref="flatList"
@@ -186,6 +194,7 @@ class RealTimeChat extends Component<
               renderItem={({ item }) => <ChatMessage urlAvatar={this.props.urlAvatar} isShowDataTime={this.props.isShowDataTime} receiverStyle={this.props.receivedChatWindow} senderStyle={this.props.senderChatWindow} myId={this.props.clientId || ''} message={item} />}
               keyExtractor={(item) => `item!.id`}
             />
+            {this.state.updateList ? <ActivityIndicator size="large" color="#ddd" /> : ''}
             <InputBox inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={this.sendMessage} />
           </View>
         </KeyboardAvoidingView>
@@ -200,6 +209,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  container: {
+    backgroundColor: '#303030'
+  }
 });
 
 export default RealTimeChat;

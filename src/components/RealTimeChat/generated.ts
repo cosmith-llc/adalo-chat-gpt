@@ -67,7 +67,8 @@ export interface ISenderChatWindow {
   borderRadius?: number;
   marginLeft?: number;
   marginRight?: number;
-  padding?: number;
+  horizontalPadding?: number;
+  vertiacalPadding?: number;
 }
 
 export interface IReceivedChatWindow {
@@ -77,7 +78,8 @@ export interface IReceivedChatWindow {
   borderRadius?: number;
   marginLeft?: number;
   marginRight?: number;
-  padding?: number;
+  horizontalPadding?: number;
+  vertiacalPadding?: number;
 }
 
 export interface IAdaloMessages {

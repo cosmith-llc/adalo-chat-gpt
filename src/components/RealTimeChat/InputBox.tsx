@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "#ffffff26",
     borderWidth: 1,
-    borderRadius: 28,
   },
   mainContainer: {
     flexDirection: "row",

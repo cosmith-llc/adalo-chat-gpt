@@ -53,7 +53,8 @@ export const ChatMessage = (props: ChatMessageProps) => {
             backgroundColor: isMyMessage() ? props.senderStyle?.backgroundColor : props.receiverStyle?.backgroundColor,
             marginLeft: isMyMessage() ? props.senderStyle?.marginLeft : props.receiverStyle?.marginLeft,
             marginRight: isMyMessage() ? props.senderStyle?.marginRight : props.receiverStyle?.marginRight,
-            padding: isMyMessage() ? props.senderStyle?.padding : props.receiverStyle?.padding,
+            paddingVertical: isMyMessage() ? props.senderStyle?.vertiacalPadding : props.receiverStyle?.vertiacalPadding,
+            paddingHorizontal: isMyMessage() ? props.senderStyle?.horizontalPadding : props.receiverStyle?.horizontalPadding,
           },
         ]}
       >
@@ -94,9 +95,9 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   imgContainer: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
