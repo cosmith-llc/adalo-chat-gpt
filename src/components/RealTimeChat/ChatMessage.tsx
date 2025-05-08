@@ -50,6 +50,8 @@ export const ChatMessage = (props: ChatMessageProps) => {
           styles.messageBox,
           {
             borderRadius: isMyMessage() ? props.senderStyle?.borderRadius || 0 : props.receiverStyle?.borderRadius || 0,
+            borderWidth: isMyMessage() ? props.senderStyle?.borderWidth : props.receiverStyle?.borderWidth,
+            borderColor: isMyMessage() ? props.senderStyle?.borderColor : props.receiverStyle?.borderColor,
             backgroundColor: isMyMessage() ? props.senderStyle?.backgroundColor : props.receiverStyle?.backgroundColor,
             marginLeft: isMyMessage() ? props.senderStyle?.marginLeft : props.receiverStyle?.marginLeft,
             marginRight: isMyMessage() ? props.senderStyle?.marginRight : props.receiverStyle?.marginRight,

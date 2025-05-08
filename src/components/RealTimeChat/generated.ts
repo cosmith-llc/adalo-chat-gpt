@@ -64,7 +64,9 @@ export interface ISenderChatWindow {
   backgroundColor?: string;
   textColor?: string;
   textDataColor?: string;
+  borderColor?: string;
   borderRadius?: number;
+  borderWidth?: number;
   marginLeft?: number;
   marginRight?: number;
   horizontalPadding?: number;
@@ -75,7 +77,9 @@ export interface IReceivedChatWindow {
   backgroundColor?: string;
   textColor?: string;
   textDataColor?: string;
+  borderColor?: string;
   borderRadius?: number;
+  borderWidth?: number;
   marginLeft?: number;
   marginRight?: number;
   horizontalPadding?: number;

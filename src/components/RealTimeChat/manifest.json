@@ -198,12 +198,31 @@
         {
           "name": "textColor",
           "displayName": "Text Color",
-          "type": "color"
+          "type": "color",
+          "default": "#afafaf"
         },
         {
           "name": "textDataColor",
           "displayName": "Text Data Color",
-          "type": "color"
+          "type": "color",
+          "default": "#808080"
+        },
+        {
+          "name": "borderColor",
+          "displayName": "Border Color",
+          "type": "color",
+          "default": "#424242"
+        },
+        {
+          "name": "borderWidth",
+          "displayName": "Border Width",
+          "type": "number",
+          "default": 1,
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 100
+          }
         },
         {
           "name": "borderRadius",
@@ -275,12 +294,31 @@
         {
           "name": "textColor",
           "displayName": "Text Color",
-          "type": "color"
+          "type": "color",
+          "default": "#afafaf"
         },
         {
           "name": "textDataColor",
           "displayName": "Text Data Color",
-          "type": "color"
+          "type": "color",
+          "default": "#808080"
+        },
+        {
+          "name": "borderColor",
+          "displayName": "Border Color",
+          "type": "color",
+          "default": "#424242"
+        },
+        {
+          "name": "borderWidth",
+          "displayName": "Border Width",
+          "type": "number",
+          "default": 1,
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 100
+          }
         },
         {
           "name": "borderRadius",
@@ -330,7 +368,7 @@
           "name": "vertiacalPadding",
           "displayName": "Vertical Padding",
           "type": "number",
-          "default": 20,
+          "default": 10,
           "control": {
             "type": "slider",
             "min": 0,
