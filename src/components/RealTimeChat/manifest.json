@@ -167,6 +167,12 @@
           "default": "#424242"
         },
         {
+          "name": "indicatorColor",
+          "displayName": "Indicator Color",
+          "type": "color",
+          "default": "#424242"
+        },
+        {
           "name": "borderWidth",
           "displayName": "Border Width",
           "type": "number",

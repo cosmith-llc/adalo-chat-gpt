@@ -14,6 +14,7 @@ import { InputBox } from "./InputBox";
 // import * as Ably from "ably";
 import axios from 'axios';
 import scrollToEnd from './scrollToEnd';
+import Loader from './Loader'
 
 const threadId = 'thread_rQGBVjd6zsELsBC1dh5I3Hqf';
 const file_id = 'file-LgHJwvtNAfw9FJGbWQFpxT';
@@ -194,7 +195,7 @@ class RealTimeChat extends Component<
               renderItem={({ item }) => <ChatMessage urlAvatar={this.props.urlAvatar} isShowDataTime={this.props.isShowDataTime} receiverStyle={this.props.receivedChatWindow} senderStyle={this.props.senderChatWindow} myId={this.props.clientId || ''} message={item} />}
               keyExtractor={(item) => `item!.id`}
             />
-            {this.state.updateList ? <ActivityIndicator size="large" color="#ddd" /> : ''}
+            {this.state.updateList ? <Loader colorIndicator={this.props.inputStyle!.indicatorColor} /> : ''}
             <InputBox inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={this.sendMessage} />
           </View>
         </KeyboardAvoidingView>
