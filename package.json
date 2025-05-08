@@ -1,7 +1,7 @@
 {
   "name": "@cosmith/adalo-chat-gpt-tst",
   "description": "Real-Time chat system for Adalo",
-  "version": "0.1.1",
+  "version": "0.1.5",
   "main": "index.js",
   "license": "ISC",
   "author": "Steven McKeown",
@@ -9,7 +9,7 @@
     "start": "tsc --watch & adalo dev",
     "build": "tsc",
     "login": "adalo login",
-    "publish": "adalo publish"
+    "publish": "tsc && adalo publish"
   },
   "devDependencies": {
     "@adalo/cli": "^1.0.2",

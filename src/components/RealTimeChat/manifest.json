@@ -32,6 +32,12 @@
       "default": ""
     },
     {
+      "name": "assistantId",
+      "displayName": "ChatGPT Assistant id",
+      "type": "text",
+      "default": ""
+    },
+    {
       "name": "fileId",
       "displayName": "File Id",
       "type": "text",

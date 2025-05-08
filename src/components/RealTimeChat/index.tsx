@@ -47,6 +47,8 @@ class RealTimeChat extends Component<
   {
     messages: any[];
     oneTimeUpdate: boolean;
+    loaded: boolean;
+    loading:boolean;
   }
 > {
   constructor(props: RealTimeChatProps) {
@@ -61,26 +63,31 @@ class RealTimeChat extends Component<
       senderId: `${this.props.clientId}+1`
     }]
     this.state = {
+      loading: false,
+      loaded: false,
       oneTimeUpdate: (this.props.adaloMessages?.length || 0) > 0,
       messages: !!props.editor ? sampleMessages : this.props.adaloMessages?.map(message => message.messageData) || [],
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
-  async sendMessage(API_KEY: string, thread_Id: string, file_id, message: string) {
+  async sendMessage(message: string) {
     if (message) {
+      const { apiKey, assistantId, threadId, fileId } = this.props;
+      console.log('assistatnt', apiKey, assistantId, threadId, fileId);
       const data = {
         "role": "user",
         "content": message,
-        "attachments": [{ "file_id": file_id, "tools": [{ "type": "file_search" }] }]
+        "attachments": [{ "file_id": fileId, "tools": [{ "type": "file_search" }] }]
       };
-      const urlSendMessage = `https://api.openai.com/v1/threads/${thread_Id}/messages`;
+      const urlSendMessage = `https://api.openai.com/v1/threads/${threadId}/messages`;
+      console.log(headers(apiKey));
       //@ts-ignore
-      await axios.post(urlSendMessage, data, headers(API_KEY));
+      await axios.post(urlSendMessage, data, { headers: headers(apiKey)});
 
-      const runResponse = await fetch(`https://api.openai.com/v1/threads/${thread_Id}/runs`, {
+      const runResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
         method: 'POST',
-        headers: headers(API_KEY),
-        body: JSON.stringify({ assistant_id, stream: true }),
+        headers: headers(apiKey),
+        body: JSON.stringify({ assistant_id: assistantId, stream: true }),
       });
 
       if (!runResponse.ok) {
@@ -97,7 +104,7 @@ class RealTimeChat extends Component<
               const data = line.trim().slice(5).trim();
               if (data === '[DONE]') {
                 console.log('Done:', true);
-                const lastMessage = await getLastMessage(API_KEY, thread_Id);
+                const lastMessage = await getLastMessage(apiKey, threadId);
                 const messages = convertMessages(lastMessage.data.data);
                 this.setState({ messages: messages || [] })
               } else {
@@ -137,12 +144,8 @@ class RealTimeChat extends Component<
     if (!this.props.editor) {
       console.log('componentDidMount:');
       const { apiKey, threadId } = this.props;
-      const lastMessage = await getLastMessage(apiKey, threadId);
-      console.log('lastMessage', lastMessage);
-      console.log('lastMessage', lastMessage.data);
-      // this.setState({ messages: this.props.adaloMessages?.map(message => message.messageData) || []})
-      const messages = convertMessages(lastMessage.data.data);
-      this.setState({ messages: messages || [] })
+      console.log('did Mound', apiKey, threadId);
+      await this.loadMessages(apiKey, threadId);
       const element = this.refs.flatList;
       setTimeout(() => scrollToEnd(element), 150);
       //scrollToTheEnd(element);
@@ -150,11 +153,32 @@ class RealTimeChat extends Component<
 
     }
   }
+  async loadMessages(apiKey, threadId) {
+    let messages = [];
+    if (apiKey && threadId) {
+      this.setState({loading: true});
+      const lastMessage = await getLastMessage(apiKey, threadId);
+      this.setState({loaded: true});
+      console.log('lastMessage', lastMessage);
+      console.log('lastMessage', lastMessage.data);
+      // this.setState({ messages: this.props.adaloMessages?.map(message => message.messageData) || []})
+      //@ts-ignore
+      messages = convertMessages(lastMessage.data.data);
+    }
+    this.setState({ messages: messages || [] })
+  }
   componentDidUpdate(prevProps: RealTimeChatProps) {
     if (!this.props.editor) {
 
-      if (this.state.messages.length === 0 && (this.props.adaloMessages || [])?.length > 0) {
-        this.setState({ messages: this.props.adaloMessages?.map(message => message.messageData) || [] })
+      if (this.state.messages.length === 0) {
+        if (!this.state.loaded && !this.state.loading) {
+          const  { apiKey: prevApiKey, threadId: prevThreadId }  = prevProps;
+          const { apiKey, threadId } = this.props;
+          console.log('Mounded', apiKey, threadId);
+          if (apiKey !== prevApiKey || threadId !== prevThreadId) {
+              this.loadMessages(apiKey, threadId);
+          }
+        }
       }
     }
   }
@@ -165,7 +189,6 @@ class RealTimeChat extends Component<
   }
   render() {
     console.log(this.props)
-    const { apiKey, threadId, fileId } = this.props;
     return (
       <View style={{ backgroundColor: this.props.backgroundColor, flex: 1 }}>
         <KeyboardAvoidingView
@@ -186,7 +209,7 @@ class RealTimeChat extends Component<
               renderItem={({ item }) => <ChatMessage isShowDataTime={this.props.isShowDataTime} receiverStyle={this.props.receivedChatWindow} senderStyle={this.props.senderChatWindow} myId={this.props.clientId || ''} message={item} />}
               keyExtractor={(item) => `item!.id`}
             />
-            <InputBox inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={ (message) => this.sendMessage(apiKey || "", threadId || "", fileId, message)} />
+            <InputBox inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={ this.sendMessage } />
           </View>
         </KeyboardAvoidingView>
       </View>
