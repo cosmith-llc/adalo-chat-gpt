@@ -102,6 +102,9 @@ export interface RealTimeChatProps {
   receivedChatWindow?: IReceivedChatWindow;
   adaloMessages?: IAdaloMessages[];
   apiKey?: string;
+  assistantId? :string;
+  threadId?: string;
+  fileId?: string;
   clientId?: string;
   channelName?: string;
   subscriptionKey?: string;

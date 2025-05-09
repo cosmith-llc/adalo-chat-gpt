@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextInput, StyleSheet, View, TouchableOpacity, ActivityIndicator } from "react-native";
+import { TextInput, StyleSheet, View, TouchableOpacity, ActivityIndicator, Platform } from "react-native";
 import Icon from '@protonapp/material-components/src/Icon'
 import { IInputStyle, ISendButton } from "./generated";
 
@@ -22,7 +22,7 @@ export const InputBox = ({ sendMessage, buttonStyles, inputStyle }: InputBoxProp
       setMessage("")
     }
   };
-
+  const textInputStyles = Platform.OS === "web" ? { borderColor: 'none', outline: 'none' } : {};
   return (
     <View style={[styles.container,
     {
@@ -37,7 +37,7 @@ export const InputBox = ({ sendMessage, buttonStyles, inputStyle }: InputBoxProp
           placeholder={"Type Message"}
           multiline
           //@ts-ignore
-          style={[styles.textInput, { borderColor: 'none', outline: 'none' }]}
+          style={[styles.textInput, textInputStyles ]}
           value={message}
           onChangeText={setMessage}
         />

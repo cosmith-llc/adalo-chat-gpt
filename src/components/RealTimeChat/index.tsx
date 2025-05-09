@@ -16,22 +16,19 @@ import axios from 'axios';
 import scrollToEnd from './scrollToEnd';
 import Loader from './Loader'
 
-const threadId = 'thread_rQGBVjd6zsELsBC1dh5I3Hqf';
-const file_id = 'file-LgHJwvtNAfw9FJGbWQFpxT';
-const assistant_id = 'asst_PgMhvpZO4W8rat69Evo11yz5'
-
 // Get from Component properties
 const OPENAI_API_KEY = '';
 
-const headers = {
+const headers = (API_KEY) => ({
   "Content-Type": "application/json",
-  "Authorization": `Bearer ${OPENAI_API_KEY}`,
+  "Authorization": `Bearer ${API_KEY}`,
   "OpenAI-Beta": "assistants=v2"
-};
+});
 
-const getLastMessage = async () => await axios.get(`https://api.openai.com/v1/threads/${threadId}/messages`, {
+// console.log(`https://api.openai.com/v1/threads/${threadId}/messages`, threadId);
+const getLastMessage = async (API_KEY, thread_Id) => await axios.get(`https://api.openai.com/v1/threads/${thread_Id}/messages`, {
   method: 'GET',
-  headers: headers
+  headers: headers(API_KEY)
 });
 /*
 const scrollToTheEnd = (flatList: { scrollToEnd: () => void; }) => {
@@ -53,6 +50,8 @@ class RealTimeChat extends Component<
     messages: any[];
     oneTimeUpdate: boolean;
     updateList: boolean
+    loaded: boolean;
+    loading: boolean;
   }
 > {
   constructor(props: RealTimeChatProps) {
@@ -67,6 +66,8 @@ class RealTimeChat extends Component<
       senderId: `${this.props.clientId}+1`
     }]
     this.state = {
+      loading: false,
+      loaded: false,
       oneTimeUpdate: (this.props.adaloMessages?.length || 0) > 0,
       messages: !!props.editor ? sampleMessages : this.props.adaloMessages?.map(message => message.messageData) || [],
       updateList: false
@@ -80,18 +81,22 @@ class RealTimeChat extends Component<
       })
       this.setState({ updateList: true })
       setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
+      const { apiKey, assistantId, threadId, fileId } = this.props;
+      console.log('assistatnt', apiKey, assistantId, threadId, fileId);
       const data = {
         "role": "user",
         "content": message,
-        "attachments": [{ "file_id": file_id, "tools": [{ "type": "file_search" }] }]
+        "attachments": [{ "file_id": fileId, "tools": [{ "type": "file_search" }] }]
       };
       const urlSendMessage = `https://api.openai.com/v1/threads/${threadId}/messages`;
-      await axios.post(urlSendMessage, data, { headers });
+      console.log(headers(apiKey));
+      //@ts-ignore
+      await axios.post(urlSendMessage, data, { headers: headers(apiKey) });
 
       const runResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
         method: 'POST',
-        headers: headers,
-        body: JSON.stringify({ assistant_id, stream: true }),
+        headers: headers(apiKey),
+        body: JSON.stringify({ assistant_id: assistantId, stream: true }),
       });
 
       if (!runResponse.ok) {
@@ -108,7 +113,7 @@ class RealTimeChat extends Component<
               const data = line.trim().slice(5).trim();
               if (data === '[DONE]') {
                 console.log('Done:', true);
-                const lastMessage = await getLastMessage();
+                const lastMessage = await getLastMessage(apiKey, threadId);
                 const messages = convertMessages(lastMessage.data.data);
                 this.setState({ messages: messages || [] })
                 setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
@@ -149,12 +154,9 @@ class RealTimeChat extends Component<
   async componentDidMount() {
     if (!this.props.editor) {
       console.log('componentDidMount:');
-      const lastMessage = await getLastMessage();
-      console.log('lastMessage', lastMessage);
-      console.log('lastMessage', lastMessage.data);
-      // this.setState({ messages: this.props.adaloMessages?.map(message => message.messageData) || []})
-      const messages = convertMessages(lastMessage.data.data);
-      this.setState({ messages: messages || [] })
+      const { apiKey, threadId } = this.props;
+      console.log('did Mound', apiKey, threadId);
+      await this.loadMessages(apiKey, threadId);
       const element = this.refs.flatList;
       setTimeout(() => scrollToEnd(element, this.state.messages.length), 150);
       //scrollToTheEnd(element);
@@ -162,11 +164,32 @@ class RealTimeChat extends Component<
 
     }
   }
+  async loadMessages(apiKey, threadId) {
+    let messages = [];
+    if (apiKey && threadId) {
+      this.setState({ loading: true });
+      const lastMessage = await getLastMessage(apiKey, threadId);
+      this.setState({ loaded: true });
+      console.log('lastMessage', lastMessage);
+      console.log('lastMessage', lastMessage.data);
+      // this.setState({ messages: this.props.adaloMessages?.map(message => message.messageData) || []})
+      //@ts-ignore
+      messages = convertMessages(lastMessage.data.data);
+    }
+    this.setState({ messages: messages || [] })
+  }
   componentDidUpdate(prevProps: RealTimeChatProps) {
     if (!this.props.editor) {
 
-      if (this.state.messages.length === 0 && (this.props.adaloMessages || [])?.length > 0) {
-        this.setState({ messages: this.props.adaloMessages?.map(message => message.messageData) || [] })
+      if (this.state.messages.length === 0) {
+        if (!this.state.loaded && !this.state.loading) {
+          const { apiKey: prevApiKey, threadId: prevThreadId } = prevProps;
+          const { apiKey, threadId } = this.props;
+          console.log('Mounded', apiKey, threadId);
+          if (apiKey !== prevApiKey || threadId !== prevThreadId) {
+            this.loadMessages(apiKey, threadId);
+          }
+        }
       }
     }
   }

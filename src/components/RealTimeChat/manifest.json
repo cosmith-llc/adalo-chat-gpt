@@ -21,25 +21,25 @@
     {
       "name": "apiKey",
       "global": true,
-      "displayName": "Ably API key",
+      "displayName": "Chat GPT API key",
       "type": "text",
       "default": ""
     },
     {
-      "name": "clientId",
-      "displayName": "Who are you?",
+      "name": "threadId",
+      "displayName": "ChatGPT Thread id",
       "type": "text",
       "default": ""
     },
     {
-      "name": "channelName",
-      "displayName": "Name of the socket channel",
+      "name": "assistantId",
+      "displayName": "ChatGPT Assistant id",
       "type": "text",
       "default": ""
     },
     {
-      "name": "subscriptionKey",
-      "displayName": "Name of the subchannel to subscribe",
+      "name": "fileId",
+      "displayName": "File Id",
       "type": "text",
       "default": ""
     },
