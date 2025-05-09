@@ -144,12 +144,14 @@
         {
           "name": "showSendingIndicator",
           "displayName": "Show sending indicator",
-          "type": "boolean"
+          "type": "boolean",
+          "default": true
         },
         {
           "name": "indicatorColor",
           "displayName": "Indicator Color",
           "type": "color",
+          "default": "#808080",
           "enabled": {
             "showSendingIndicator": true
           }
@@ -163,12 +165,6 @@
         {
           "name": "borderColor",
           "displayName": "Border Color",
-          "type": "color",
-          "default": "#424242"
-        },
-        {
-          "name": "indicatorColor",
-          "displayName": "Indicator Color",
           "type": "color",
           "default": "#424242"
         },

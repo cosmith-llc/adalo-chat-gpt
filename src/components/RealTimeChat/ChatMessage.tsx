@@ -22,6 +22,18 @@ export const ChatMessage = (props: ChatMessageProps) => {
   const isMyMessage = () => {
     return message.role === 'user';
   };
+  const formatTimeFromTimestamp = (timestamp): string => {
+    if (!timestamp || isNaN(timestamp)) return 'Invalid timestamp';
+
+    const date = new Date(timestamp * 1000); // множимо на 1000, бо JS очікує мілісекунди
+
+    if (isNaN(date.getTime())) return 'Invalid date';
+
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${hours}:${minutes}`;
+  };
 
   const ShowUrl = () => {
     if (isMyMessage() && urlAvatar?.isShowUserUrl) {
@@ -73,7 +85,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
         ]}
       >
         <Text style={[styles.message, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}><Markdown>{message.message}</Markdown></Text>
-        {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textDataColor : props.receiverStyle?.textDataColor }]}>{new Date(message.createdDate).toLocaleDateString()} {new Date(message.createdDate).toLocaleTimeString()}</Text> : ''}
+        {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textDataColor : props.receiverStyle?.textDataColor }]}>{formatTimeFromTimestamp(message.createdDate)}</Text> : ''}
       </View>
     </View >
   );

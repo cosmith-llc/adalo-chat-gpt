@@ -2112,6 +2112,11 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
+dayjs@^1.11.13:
+  version "1.11.13"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.13.tgz#92430b0139055c3ebb60150aa13e860a4b5a366c"
+  integrity sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==
+
 debounce@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.1.tgz#38881d8f4166a5c5848020c11827b834bcb3e0a5"
@@ -3930,11 +3935,6 @@ react-native-iphone-x-helper@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
-
-react-native-loader-kit@^2.0.8:
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/react-native-loader-kit/-/react-native-loader-kit-2.0.8.tgz#2d3b98805ec7edb857d38ee27402c05c60338980"
-  integrity sha512-mteFh4HF5uMjazLPxEE4lWw3aCWLH5jiUbqVZU4TtOWC+WV/Kck+ipDwsGzEqVxaIXh6bNoti1fkziNGLiuDJg==
 
 react-native-markdown-display@^7.0.2:
   version "7.0.2"

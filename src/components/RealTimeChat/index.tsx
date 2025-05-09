@@ -43,7 +43,7 @@ const convertMessages = (messages: { id: string; role: string; assistant_id: any
     id: message.id,
     role: message.role === 'user' ? 'user' : 'assistant',
     message: message.content[0].text.value,
-    createdDate: new Date(message.created_at)
+    createdDate: message.created_at
   }));
 };
 
@@ -75,7 +75,9 @@ class RealTimeChat extends Component<
   }
   async sendMessage(message: string) {
     if (message) {
-      this.setState({ messages: [...this.state.messages, { message: message, role: 'user', createdDate: new Date() }] })
+      this.setState({
+        messages: [...this.state.messages, { message: message, role: 'user', createdDate: new Date() }]
+      })
       this.setState({ updateList: true })
       setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
       const data = {
@@ -195,7 +197,7 @@ class RealTimeChat extends Component<
               renderItem={({ item }) => <ChatMessage urlAvatar={this.props.urlAvatar} isShowDataTime={this.props.isShowDataTime} receiverStyle={this.props.receivedChatWindow} senderStyle={this.props.senderChatWindow} myId={this.props.clientId || ''} message={item} />}
               keyExtractor={(item) => `item!.id`}
             />
-            {this.state.updateList ? <Loader colorIndicator={this.props.inputStyle!.indicatorColor} /> : ''}
+            {this.props.sendButton?.showSendingIndicator && this.state.updateList ? <Loader colorIndicator={this.props.sendButton!.indicatorColor} /> : ''}
             <InputBox inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={this.sendMessage} />
           </View>
         </KeyboardAvoidingView>
