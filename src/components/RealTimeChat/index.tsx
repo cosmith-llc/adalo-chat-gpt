@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Text,
+  ActivityIndicator,
   View,
   StyleSheet,
 } from "react-native";
@@ -13,6 +14,7 @@ import { InputBox } from "./InputBox";
 // import * as Ably from "ably";
 import axios from 'axios';
 import scrollToEnd from './scrollToEnd';
+import Loader from './Loader'
 
 // Get from Component properties
 const OPENAI_API_KEY = '';
@@ -23,22 +25,18 @@ const headers = (API_KEY) => ({
   "OpenAI-Beta": "assistants=v2"
 });
 
-// console.log(`https://api.openai.com/v1/threads/${threadId}/messages`, threadId);
+
 const getLastMessage = async (API_KEY, thread_Id) => await axios.get(`https://api.openai.com/v1/threads/${thread_Id}/messages`, {
   method: 'GET',
   headers: headers(API_KEY)
 });
-/*
-const scrollToTheEnd = (flatList: { scrollToEnd: () => void; }) => {
-  flatList.scrollToEnd();
-}
-*/
+
 const convertMessages = (messages: { id: string; role: string; assistant_id: any; created_at: any; content: { text: { value: any; }; }[]; }[]) => {
   return messages.reverse().map((message: { id: string; role: string; assistant_id: any; created_at: any; content: { text: { value: any; }; }[]; }) => ({
     id: message.id,
     role: message.role === 'user' ? 'user' : 'assistant',
     message: message.content[0].text.value,
-    createdDate: new Date(message.created_at)
+    createdDate: message.created_at
   }));
 };
 
@@ -47,8 +45,9 @@ class RealTimeChat extends Component<
   {
     messages: any[];
     oneTimeUpdate: boolean;
+    updateList: boolean
     loaded: boolean;
-    loading:boolean;
+    loading: boolean;
   }
 > {
   constructor(props: RealTimeChatProps) {
@@ -67,27 +66,36 @@ class RealTimeChat extends Component<
       loaded: false,
       oneTimeUpdate: (this.props.adaloMessages?.length || 0) > 0,
       messages: !!props.editor ? sampleMessages : this.props.adaloMessages?.map(message => message.messageData) || [],
+      updateList: false
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
   async sendMessage(message: string) {
     if (message) {
+      this.setState({
+        messages: [...this.state.messages, { message: message, role: 'user', createdDate: new Date() }, { message: '', role: 'assistant', createdDate: new Date() }]
+      })
+      this.setState({ updateList: true })
+      setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
       const { apiKey, assistantId, threadId, fileId } = this.props;
-      console.log('assistatnt', apiKey, assistantId, threadId, fileId);
+
       const data = {
         "role": "user",
-        "content": message,
-        "attachments": [{ "file_id": fileId, "tools": [{ "type": "file_search" }] }]
+        "content": message
       };
       const urlSendMessage = `https://api.openai.com/v1/threads/${threadId}/messages`;
-      console.log(headers(apiKey));
+
       //@ts-ignore
-      await axios.post(urlSendMessage, data, { headers: headers(apiKey)});
+      await axios.post(urlSendMessage, data, { headers: headers(apiKey) });
 
       const runResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
         method: 'POST',
         headers: headers(apiKey),
-        body: JSON.stringify({ assistant_id: assistantId, stream: true }),
+        body: JSON.stringify({
+          assistant_id: assistantId, stream: true,
+          tools: [{ type: 'file_search' }],
+          tool_choice: { type: 'file_search' }
+        }),
       });
 
       if (!runResponse.ok) {
@@ -107,11 +115,17 @@ class RealTimeChat extends Component<
                 const lastMessage = await getLastMessage(apiKey, threadId);
                 const messages = convertMessages(lastMessage.data.data);
                 this.setState({ messages: messages || [] })
+                setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
+                this.setState({ updateList: false })
               } else {
                 try {
-                  console.log('before end', data);
                   const event = JSON.parse(data);
-                  console.log('event', event);
+                  if (event && event.object === 'thread.message.delta') {
+                    const messages = this.state.messages;
+                    const length = messages.length;
+                    messages[length - 1].message = messages[length - 1].message + event.delta.content[0].text.value;
+                    this.setState({ messages: [...this.state.messages] })
+                  }
                 } catch (error) {
                   console.error('Error parsing streamed response:', error);
                 }
@@ -142,26 +156,21 @@ class RealTimeChat extends Component<
   }
   async componentDidMount() {
     if (!this.props.editor) {
-      console.log('componentDidMount:');
       const { apiKey, threadId } = this.props;
-      console.log('did Mound', apiKey, threadId);
+
       await this.loadMessages(apiKey, threadId);
+
       const element = this.refs.flatList;
-      setTimeout(() => scrollToEnd(element), 150);
-      //scrollToTheEnd(element);
-      //scrollToTheEnd(element);
+      setTimeout(() => scrollToEnd(element, this.state.messages.length), 150);
 
     }
   }
   async loadMessages(apiKey, threadId) {
     let messages = [];
     if (apiKey && threadId) {
-      this.setState({loading: true});
+      this.setState({ loading: true });
       const lastMessage = await getLastMessage(apiKey, threadId);
-      this.setState({loaded: true});
-      console.log('lastMessage', lastMessage);
-      console.log('lastMessage', lastMessage.data);
-      // this.setState({ messages: this.props.adaloMessages?.map(message => message.messageData) || []})
+      this.setState({ loaded: true });
       //@ts-ignore
       messages = convertMessages(lastMessage.data.data);
     }
@@ -172,11 +181,10 @@ class RealTimeChat extends Component<
 
       if (this.state.messages.length === 0) {
         if (!this.state.loaded && !this.state.loading) {
-          const  { apiKey: prevApiKey, threadId: prevThreadId }  = prevProps;
+          const { apiKey: prevApiKey, threadId: prevThreadId } = prevProps;
           const { apiKey, threadId } = this.props;
-          console.log('Mounded', apiKey, threadId);
           if (apiKey !== prevApiKey || threadId !== prevThreadId) {
-              this.loadMessages(apiKey, threadId);
+            this.loadMessages(apiKey, threadId);
           }
         }
       }
@@ -188,28 +196,28 @@ class RealTimeChat extends Component<
     }
   }
   render() {
-    console.log(this.props)
     return (
-      <View style={{ backgroundColor: this.props.backgroundColor, flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <View
-            style={{
+            style={[styles.container, {
               height: this.props._height,
               width: this.props._width,
-              backgroundColor: "#303030"
-            }}
+              backgroundColor: this.props.backgroundColor
+            }]}
           >
             <FlatList
               ref="flatList"
               style={{ flex: 1 }}
               data={this.state.messages}
-              renderItem={({ item }) => <ChatMessage isShowDataTime={this.props.isShowDataTime} receiverStyle={this.props.receivedChatWindow} senderStyle={this.props.senderChatWindow} myId={this.props.clientId || ''} message={item} />}
+              renderItem={({ item }) => <ChatMessage urlAvatar={this.props.urlAvatar} isShowDataTime={this.props.isShowDataTime} receiverStyle={this.props.receivedChatWindow} senderStyle={this.props.senderChatWindow} myId={this.props.clientId || ''} message={item} />}
               keyExtractor={(item) => `item!.id`}
             />
-            <InputBox inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={ this.sendMessage } />
+            {this.props.sendButton?.showSendingIndicator && this.state.updateList ? <Loader colorIndicator={this.props.sendButton!.indicatorColor} /> : ''}
+            <InputBox updateList={this.state.updateList} inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={this.sendMessage} />
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -223,6 +231,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  container: {
+    backgroundColor: '#303030'
+  }
 });
 
 export default RealTimeChat;

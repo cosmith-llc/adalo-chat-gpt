@@ -46,29 +46,46 @@ export interface ISendButton {
   indicatorColor?: string;
 }
 
+export interface IUrlAvatar {
+  chatUrl?: string;
+  isShowChatUrl?: boolean;
+  userUrl?: string;
+  isShowUserUrl?: boolean;
+  radiusAvatar?: number;
+}
+
 export interface IInputStyle {
   borderColor?: string;
   borderWidth?: number;
   borderRadius?: number;
   backgroundColor?: string;
+  indicatorColor?: string;
 }
 
 export interface ISenderChatWindow {
   backgroundColor?: string;
   textColor?: string;
+  textDataColor?: string;
+  borderColor?: string;
   borderRadius?: number;
+  borderWidth?: number;
   marginLeft?: number;
   marginRight?: number;
-  padding?: number;
+  horizontalPadding?: number;
+  vertiacalPadding?: number;
 }
 
 export interface IReceivedChatWindow {
   backgroundColor?: string;
   textColor?: string;
+  textDataColor?: string;
+  borderColor?: string;
   borderRadius?: number;
+  borderWidth?: number;
   marginLeft?: number;
   marginRight?: number;
-  padding?: number;
+  horizontalPadding?: number;
+  vertiacalPadding?: number;
 }
 
 export interface IAdaloMessages {
@@ -79,6 +96,7 @@ export interface IAdaloMessages {
 
 export interface RealTimeChatProps {
   sendButton?: ISendButton;
+  urlAvatar?: IUrlAvatar;
   inputStyle?: IInputStyle;
   senderChatWindow?: ISenderChatWindow;
   receivedChatWindow?: IReceivedChatWindow;

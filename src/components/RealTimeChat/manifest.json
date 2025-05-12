@@ -57,7 +57,8 @@
     {
       "name": "backgroundColor",
       "displayName": "Background Color",
-      "type": "color"
+      "type": "color",
+      "default": "#212121"
     }
   ],
   "childComponents": [
@@ -85,6 +86,47 @@
       ]
     },
     {
+      "name": "urlAvatar",
+      "displayName": "Url Avatar Img",
+      "props": [
+        {
+          "name": "chatUrl",
+          "displayName": "Chat Url",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "name": "isShowChatUrl",
+          "displayName": "Show Chat Url",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "userUrl",
+          "displayName": "User Url",
+          "type": "string",
+          "default": ""
+        },
+        {
+          "name": "isShowUserUrl",
+          "displayName": "Show USer Url",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "name": "radiusAvatar",
+          "displayName": "Radius Avatar",
+          "type": "number",
+          "default": 10,
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 100
+          }
+        }
+      ]
+    },
+    {
       "name": "sendButton",
       "displayName": "Send Button",
       "props": [
@@ -102,12 +144,14 @@
         {
           "name": "showSendingIndicator",
           "displayName": "Show sending indicator",
-          "type": "boolean"
+          "type": "boolean",
+          "default": true
         },
         {
           "name": "indicatorColor",
           "displayName": "Indicator Color",
           "type": "color",
+          "default": "#808080",
           "enabled": {
             "showSendingIndicator": true
           }
@@ -121,12 +165,14 @@
         {
           "name": "borderColor",
           "displayName": "Border Color",
-          "type": "color"
+          "type": "color",
+          "default": "#424242"
         },
         {
           "name": "borderWidth",
           "displayName": "Border Width",
           "type": "number",
+          "default": 1,
           "control": {
             "type": "slider",
             "min": 0,
@@ -137,6 +183,7 @@
           "name": "borderRadius",
           "displayName": "Border Radius",
           "type": "number",
+          "default": 28,
           "control": {
             "type": "slider",
             "min": 0,
@@ -146,7 +193,8 @@
         {
           "name": "backgroundColor",
           "displayName": "Background Color",
-          "type": "color"
+          "type": "color",
+          "default": "#303030"
         }
       ]
     },
@@ -157,17 +205,43 @@
         {
           "name": "backgroundColor",
           "displayName": "Background Color",
-          "type": "color"
+          "type": "color",
+          "default": "#303030"
         },
         {
           "name": "textColor",
           "displayName": "Text Color",
-          "type": "color"
+          "type": "color",
+          "default": "#afafaf"
+        },
+        {
+          "name": "textDataColor",
+          "displayName": "Text Data Color",
+          "type": "color",
+          "default": "#808080"
+        },
+        {
+          "name": "borderColor",
+          "displayName": "Border Color",
+          "type": "color",
+          "default": "#424242"
+        },
+        {
+          "name": "borderWidth",
+          "displayName": "Border Width",
+          "type": "number",
+          "default": 1,
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 100
+          }
         },
         {
           "name": "borderRadius",
           "displayName": "Border Radius",
           "type": "number",
+          "default": 28,
           "control": {
             "type": "slider",
             "min": 0,
@@ -178,7 +252,7 @@
           "name": "marginLeft",
           "displayName": "Left Margin",
           "type": "number",
-          "default": 50,
+          "default": 5,
           "control": {
             "type": "slider",
             "min": 0,
@@ -189,7 +263,7 @@
           "name": "marginRight",
           "displayName": "Right Margin",
           "type": "number",
-          "default": 50,
+          "default": 5,
           "control": {
             "type": "slider",
             "min": 0,
@@ -197,8 +271,19 @@
           }
         },
         {
-          "name": "padding",
-          "displayName": "Padding",
+          "name": "horizontalPadding",
+          "displayName": "Horizontal Padding",
+          "type": "number",
+          "default": 20,
+          "control": {
+            "type": "slider",
+            "min": 0,
+            "max": 100
+          }
+        },
+        {
+          "name": "vertiacalPadding",
+          "displayName": "Vertical Padding",
           "type": "number",
           "default": 10,
           "control": {
@@ -216,17 +301,43 @@
         {
           "name": "backgroundColor",
           "displayName": "Background Color",
-          "type": "color"
+          "type": "color",
+          "default": "#303030"
         },
         {
           "name": "textColor",
           "displayName": "Text Color",
-          "type": "color"
+          "type": "color",
+          "default": "#afafaf"
+        },
+        {
+          "name": "textDataColor",
+          "displayName": "Text Data Color",
+          "type": "color",
+          "default": "#808080"
+        },
+        {
+          "name": "borderColor",
+          "displayName": "Border Color",
+          "type": "color",
+          "default": "#424242"
+        },
+        {
+          "name": "borderWidth",
+          "displayName": "Border Width",
+          "type": "number",
+          "default": 1,
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 100
+          }
         },
         {
           "name": "borderRadius",
           "displayName": "Border Radius",
           "type": "number",
+          "default": 28,
           "control": {
             "type": "slider",
             "min": 0,
@@ -237,7 +348,7 @@
           "name": "marginLeft",
           "displayName": "Left Margin",
           "type": "number",
-          "default": 50,
+          "default": 5,
           "control": {
             "type": "slider",
             "min": 0,
@@ -256,8 +367,19 @@
           }
         },
         {
-          "name": "padding",
-          "displayName": "Padding",
+          "name": "horizontalPadding",
+          "displayName": "Horizontal Padding",
+          "type": "number",
+          "default": 20,
+          "control": {
+            "type": "slider",
+            "min": 0,
+            "max": 100
+          }
+        },
+        {
+          "name": "vertiacalPadding",
+          "displayName": "Vertical Padding",
           "type": "number",
           "default": 10,
           "control": {

@@ -7,14 +7,16 @@ interface InputBoxProps {
   sendMessage: (message: string) => void
   buttonStyles?: ISendButton
   inputStyle?: IInputStyle
+  updateList: boolean
 }
 
-export const InputBox = ({ sendMessage, buttonStyles, inputStyle }: InputBoxProps) => {
+export const InputBox = ({ sendMessage, buttonStyles, inputStyle, updateList }: InputBoxProps) => {
   const [sending, setSending] = useState(false)
   const [message, setMessage] = useState("");
   const [myUserId, setMyUserId] = useState<string | null>(null);
 
   const onPress = () => {
+    console.log('onPresButton')
     if (!sending && message) {
       setSending(true)
       sendMessage(message)
@@ -37,13 +39,18 @@ export const InputBox = ({ sendMessage, buttonStyles, inputStyle }: InputBoxProp
           placeholder={"Type Message"}
           multiline
           //@ts-ignore
-          style={[styles.textInput, textInputStyles ]}
+          style={[styles.textInput, textInputStyles]}
           value={message}
           onChangeText={setMessage}
+          editable={!updateList}
         />
       </View>
 
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={onPress} disabled={message.trim() === '' || sending}
+        style={[
+          styles.buttonContainer,
+          (message.trim() === '' || sending) && { opacity: 0.5 } // визуально делаем неактивной
+        ]}>
 
         <View style={styles.buttonContainer}>
           {
@@ -70,7 +77,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "#ffffff26",
     borderWidth: 1,
-    borderRadius: 28,
   },
   mainContainer: {
     flexDirection: "row",
@@ -83,9 +89,9 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     padding: 5,
-    fontSize: '1rem',
+    fontSize: 16,
     color: "#afafaf",
-    backgroundСolor: "#303030",
+    textAlignVertical: 'center',
   },
   buttonContainer: {
     borderRadius: 25,

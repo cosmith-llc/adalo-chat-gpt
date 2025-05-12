@@ -1,5 +1,5 @@
-const scrollToEnd = (element) => {
-   element.scrollToEnd();
+const scrollToEnd = (element, index) => {
+  element.scrollToEnd();
 };
 
 export default scrollToEnd;

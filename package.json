@@ -1,7 +1,7 @@
 {
   "name": "@cosmith/adalo-chat-gpt-tst",
   "description": "Real-Time chat system for Adalo",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "main": "index.js",
   "license": "ISC",
   "author": "Steven McKeown",
@@ -25,6 +25,7 @@
     "@protonapp/material-components": "^0.9.3",
     "@protonapp/react-native-material-ui": "^2.0.6",
     "axios": "^1.9.0",
+    "react-native-markdown-display": "^7.0.2",
     "react-native-vector-icons": "^9.0.0"
   }
 }
