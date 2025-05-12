@@ -7,14 +7,16 @@ interface InputBoxProps {
   sendMessage: (message: string) => void
   buttonStyles?: ISendButton
   inputStyle?: IInputStyle
+  updateList: boolean
 }
 
-export const InputBox = ({ sendMessage, buttonStyles, inputStyle }: InputBoxProps) => {
+export const InputBox = ({ sendMessage, buttonStyles, inputStyle, updateList }: InputBoxProps) => {
   const [sending, setSending] = useState(false)
   const [message, setMessage] = useState("");
   const [myUserId, setMyUserId] = useState<string | null>(null);
 
   const onPress = () => {
+    console.log('onPresButton')
     if (!sending && message) {
       setSending(true)
       sendMessage(message)
@@ -37,9 +39,10 @@ export const InputBox = ({ sendMessage, buttonStyles, inputStyle }: InputBoxProp
           placeholder={"Type Message"}
           multiline
           //@ts-ignore
-          style={[styles.textInput, textInputStyles ]}
+          style={[styles.textInput, textInputStyles]}
           value={message}
           onChangeText={setMessage}
+          editable={!updateList}
         />
       </View>
 

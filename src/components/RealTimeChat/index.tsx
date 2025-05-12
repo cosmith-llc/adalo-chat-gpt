@@ -91,7 +91,8 @@ class RealTimeChat extends Component<
       const runResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
         method: 'POST',
         headers: headers(apiKey),
-        body: JSON.stringify({ assistant_id: assistantId, stream: true,            
+        body: JSON.stringify({
+          assistant_id: assistantId, stream: true,
           tools: [{ type: 'file_search' }],
           tool_choice: { type: 'file_search' }
         }),
@@ -122,8 +123,8 @@ class RealTimeChat extends Component<
                   if (event && event.object === 'thread.message.delta') {
                     const messages = this.state.messages;
                     const length = messages.length;
-                    messages[ length - 1 ].message = messages[ length - 1].message + event.delta.content[0].text.value;
-                    this.setState({ messages: [ ...this.state.messages ] })
+                    messages[length - 1].message = messages[length - 1].message + event.delta.content[0].text.value;
+                    this.setState({ messages: [...this.state.messages] })
                   }
                 } catch (error) {
                   console.error('Error parsing streamed response:', error);
@@ -216,7 +217,7 @@ class RealTimeChat extends Component<
               keyExtractor={(item) => `item!.id`}
             />
             {this.props.sendButton?.showSendingIndicator && this.state.updateList ? <Loader colorIndicator={this.props.sendButton!.indicatorColor} /> : ''}
-            <InputBox inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={this.sendMessage} />
+            <InputBox updateList={this.state.updateList} inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={this.sendMessage} />
           </View>
         </KeyboardAvoidingView>
       </View>
