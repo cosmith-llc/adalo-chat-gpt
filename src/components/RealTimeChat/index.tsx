@@ -80,97 +80,74 @@ class RealTimeChat extends Component<RealTimeChatProps,
   }
 
   async sendMessage(message: string) {
-    if (message) {
-      this.setState({
-        messages: [
-          ...this.state.messages,
-          {
-            message: message,
-            role: 'user',
-            createdDate: new Date()
-          },
-          {
-            message: '',
-            role: 'assistant',
-            createdDate: new Date()
-          }
-        ]
-      });
-      this.setState({ updateList: true });
-      setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
-      const { apiKey, assistantId, threadId, fileId } = this.props;
+    if (!message) return;
 
-      const data = {
-        'role': 'user',
-        'content': message
+    this.setState({
+      messages: [
+        ...this.state.messages,
+        {
+          message: message,
+          role: 'user',
+          createdDate: new Date()
+        },
+        {
+          message: '',
+          role: 'assistant',
+          createdDate: new Date()
+        }
+      ],
+      updateList: true
+    });
+
+    setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
+
+    const { apiKey, assistantId, threadId } = this.props;
+
+    try {
+      await axios.post(`https://api.openai.com/v1/threads/${threadId}/messages`, {
+        role: 'user',
+        content: message
+      }, { headers: headers(apiKey) });
+
+      const runRes = await axios.post(`https://api.openai.com/v1/threads/${threadId}/runs`, {
+        assistant_id: assistantId,
+        tools: [{ type: 'file_search' }],
+        tool_choice: { type: 'file_search' }
+      }, { headers: headers(apiKey) });
+
+      const runId = runRes.data.id;
+
+      const waitForRun = async () => {
+        let status = 'in_progress';
+        while (status !== 'completed' && status !== 'failed' && status !== 'cancelled') {
+          await new Promise(res => setTimeout(res, 1500));
+          const res = await axios.get(`https://api.openai.com/v1/threads/${threadId}/runs/${runId}`, {
+            headers: headers(apiKey)
+          });
+          status = res.data.status;
+        }
+        return status;
       };
-      const urlSendMessage = `https://api.openai.com/v1/threads/${threadId}/messages`;
 
-      //@ts-ignore
-      await axios.post(urlSendMessage, data, { headers: headers(apiKey) });
+      const finalStatus = await waitForRun();
 
-      const runResponse = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
-        method: 'POST',
-        headers: headers(apiKey),
-        body: JSON.stringify({
-          assistant_id: assistantId, stream: true,
-          tools: [{ type: 'file_search' }],
-          tool_choice: { type: 'file_search' }
-        }),
-      });
-
-      if (!runResponse.ok) {
-        throw new Error(`HTTP error! status: ${runResponse.status}`);
-      }
-
-      if (runResponse && runResponse.body) {
-        const reader = runResponse.body.getReader();
-        const decoder = new TextDecoder();
-        const handleStreamedResponse = async (value: any) => {
-          const lines = decoder.decode(value).split('\n');
-          for (const line of lines) {
-            if (line.trim().startsWith('data:')) {
-              const data = line.trim().slice(5).trim();
-              if (data === '[DONE]') {
-                console.log('Done:', true);
-                const lastMessage = await getLastMessage(apiKey, threadId);
-                const messages = convertMessages(lastMessage.data.data);
-                this.setState({ messages: messages || [] })
-                setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
-                this.setState({ updateList: false })
-              } else {
-                try {
-                  const event = JSON.parse(data);
-                  if (event && event.object === 'thread.message.delta') {
-                    const messages = this.state.messages;
-                    const length = messages.length;
-                    messages[length - 1].message = messages[length - 1].message + event.delta.content[0].text.value;
-                    this.setState({ messages: [...this.state.messages] })
-                  }
-                } catch (error) {
-                  console.error('Error parsing streamed response:', error);
-                }
-              }
-            }
-          }
-        };
-
-        const readLoop = async () => {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) {
-              break;
-            }
-            await handleStreamedResponse(value);
-          }
-        };
-
-        readLoop();
+      if (finalStatus === 'completed') {
+        const lastMessage = await getLastMessage(apiKey, threadId);
+        const messages = convertMessages(lastMessage.data.data);
+        this.setState({ messages: messages || [], updateList: false });
+        setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
+      } else {
+        console.error('Run ended with status:', finalStatus);
+        this.setState({ updateList: false });
       }
 
       if (this.props.onSend) {
-        this.props.onSend(message)
+        this.props.onSend(message);
       }
+
+    } catch (err) {
+      console.error('Error during sendMessage:', err);
+      this.setState({ updateList: false });
     }
   }
 
@@ -238,6 +215,12 @@ class RealTimeChat extends Component<RealTimeChatProps,
                                                      myId={this.props.clientId || ''}
                                                      message={item}/>}
               keyExtractor={(item) => item!.id}
+              initialNumToRender={50}
+              onContentSizeChange={() => {
+                if (this.state.messages.length > 0) {
+                  scrollToEnd(this.refs.flatList, this.state.messages.length);
+                }
+              }}
             />
             {this.props.sendButton?.showSendingIndicator && this.state.updateList ?
               <Loader colorIndicator={this.props.sendButton!.indicatorColor}/> : ''}

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { StyleSheet, Dimensions, View, Text, Image } from "react-native";
-import { IUrlAvatar, IReceivedChatWindow, ISenderChatWindow } from "./generated";
-import Icon from '@protonapp/material-components/src/Icon'
-import Markdown from "react-native-markdown-display";
+import React from 'react';
+import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { IReceivedChatWindow, ISenderChatWindow, IUrlAvatar } from './generated';
+import Markdown from 'react-native-markdown-display';
 
 export type ChatMessageProps = {
   message: {
@@ -25,7 +24,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
   const formatTimeFromTimestamp = (timestamp): string => {
     if (!timestamp || isNaN(timestamp)) return 'Invalid timestamp';
 
-    const date = new Date(timestamp * 1000); // множимо на 1000, бо JS очікує мілісекунди
+    const date = new Date(timestamp * 1000);
 
     if (isNaN(date.getTime())) return 'Invalid date';
 
@@ -43,7 +42,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
           height: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar * 2 : 20,
           borderRadius: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar : 10,
         }]}>
-          <Image source={{ uri: urlAvatar?.userUrl }} style={styles.imgAvatar} />
+          <Image source={{ uri: urlAvatar?.userUrl }} style={styles.imgAvatar}/>
         </View>
       )
 
@@ -55,7 +54,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
           height: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar * 2 : 20,
           borderRadius: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar : 10,
         }]}>
-          <Image source={{ uri: urlAvatar?.chatUrl }} style={styles.imgAvatar} />
+          <Image source={{ uri: urlAvatar?.chatUrl }} style={styles.imgAvatar}/>
         </View>
       )
     }
@@ -66,11 +65,11 @@ export const ChatMessage = (props: ChatMessageProps) => {
 
   return (
     <View style={[styles.container, {
-      flexDirection: isMyMessage() ? "row-reverse" : "row",
+      flexDirection: isMyMessage() ? 'row-reverse' : 'row',
       // alignItems: isMyMessage() ? 'flex-end' : "flex-start",
       // flexDirection: isMyMessage() ? "row-reverse" : "row",
     }]}>
-      <ShowUrl />
+      <ShowUrl/>
       <View
         style={[
           styles.messageBox,
@@ -86,10 +85,20 @@ export const ChatMessage = (props: ChatMessageProps) => {
           },
         ]}
       >
-        <Text style={[styles.message, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}><Markdown>{messageFormate}</Markdown></Text>
-        {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textDataColor : props.receiverStyle?.textDataColor }]}>{formatTimeFromTimestamp(message.createdDate)}</Text> : ''}
+        <Markdown
+          style={{
+            body: {
+              ...styles.message,
+              color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor,
+            }
+          }}
+        >
+          {messageFormate}
+        </Markdown>
+        {isShowDataTime ? <Text
+          style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textDataColor : props.receiverStyle?.textDataColor }]}>{formatTimeFromTimestamp(message.createdDate)}</Text> : ''}
       </View>
-    </View >
+    </View>
   );
 };
 
@@ -98,30 +107,30 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   messageBox: {
-    maxWidth: "70%",
+    maxWidth: '70%',
     padding: 10,
-    backgroundСolor: "#303030",
-    borderColor: "#ffffff26",
+    backgroundСolor: '#303030',
+    borderColor: '#ffffff26',
     borderWidth: 1,
     borderRadius: 28,
   },
   name: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 5,
   },
   message: {
-    width: "100%",
+    width: '100%',
     color: '#fff',
   },
   media: {
-    width: "100%",
-    height: Dimensions.get("screen").width,
+    width: '100%',
+    height: Dimensions.get('screen').width,
     marginVertical: 10,
   },
   time: {
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     fontSize: 12,
-    color: "gray",
+    color: 'gray',
   },
   imgContainer: {
     width: 30,

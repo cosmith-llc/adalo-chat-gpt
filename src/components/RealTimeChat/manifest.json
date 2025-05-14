@@ -69,29 +69,6 @@
   ],
   "childComponents": [
     {
-      "name": "messageData",
-      "displayName": "Message Data",
-      "role": "listItem",
-      "reference": "adaloMessages",
-      "props": [
-        {
-          "name": "message",
-          "displayName": "Message",
-          "type": "text"
-        },
-        {
-          "name": "senderId",
-          "displayName": "Sender Id",
-          "type": "text"
-        },
-        {
-          "name": "createdDate",
-          "displayName": "Created Date",
-          "type": "date"
-        }
-      ]
-    },
-    {
       "name": "urlAvatar",
       "displayName": "Avatar",
       "props": [
@@ -105,7 +82,10 @@
           "name": "chatUrl",
           "displayName": "Chat image url.",
           "type": "text",
-          "default": ""
+          "default": "",
+          "enabled": {
+            "isShowChatUrl": true
+          }
         },
         {
           "name": "isShowUserUrl",
@@ -117,7 +97,10 @@
           "name": "userUrl",
           "displayName": "User image url.",
           "type": "text",
-          "default": ""
+          "default": "",
+          "enabled": {
+            "isShowUserUrl": true
+          }
         },
         {
           "name": "radiusAvatar",

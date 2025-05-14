@@ -103,7 +103,7 @@ export interface RealTimeChatProps {
   adaloMessages?: IAdaloMessages[];
   placeholder?: string;
   apiKey?: string;
-  assistantId? :string;
+  assistantId?: string;
   threadId?: string;
   fileId?: string;
   clientId?: string;

@@ -35,9 +35,10 @@ export const InputBox = ({
       setSending(true)
       sendMessage(message)
       setSending(false)
-      setMessage('')
     }
+    setMessage('')
   };
+
   const textInputStyles = Platform.OS === 'web' ? { borderColor: 'none', outline: 'none' } : {};
   return (
     <View style={[styles.container,
@@ -59,13 +60,11 @@ export const InputBox = ({
           editable={!updateList}
         />
       </View>
-
       <TouchableOpacity onPress={onPress} disabled={message.trim() === '' || sending}
                         style={[
                           styles.buttonContainer,
-                          (message.trim() === '' || sending) && { opacity: 0.5 } // визуально делаем неактивной
+                          (message.trim() === '' || sending) && { opacity: 0.5 }
                         ]}>
-
         <View style={styles.buttonContainer}>
           {
             sending && buttonStyles?.showSendingIndicator
