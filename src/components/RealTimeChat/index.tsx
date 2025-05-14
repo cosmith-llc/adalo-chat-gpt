@@ -228,6 +228,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
           >
             <FlatList
               ref="flatList"
+              keyboardShouldPersistTaps="handled"
               style={{ flex: 1 }}
               data={this.state.messages}
               renderItem={({ item }) => <ChatMessage urlAvatar={this.props.urlAvatar}
