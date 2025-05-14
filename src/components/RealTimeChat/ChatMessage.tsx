@@ -62,6 +62,8 @@ export const ChatMessage = (props: ChatMessageProps) => {
     return <></>
   }
 
+  const messageFormate = isMyMessage() ? message.message : message.message.replace(/【\d+:\d+†[^】]+】/g, '')
+
   return (
     <View style={[styles.container, {
       flexDirection: isMyMessage() ? "row-reverse" : "row",
@@ -84,7 +86,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
           },
         ]}
       >
-        <Text style={[styles.message, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}><Markdown>{message.message}</Markdown></Text>
+        <Text style={[styles.message, { color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor }]}><Markdown>{messageFormate}</Markdown></Text>
         {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textDataColor : props.receiverStyle?.textDataColor }]}>{formatTimeFromTimestamp(message.createdDate)}</Text> : ''}
       </View>
     </View >
