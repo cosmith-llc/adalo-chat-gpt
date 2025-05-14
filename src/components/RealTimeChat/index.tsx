@@ -217,7 +217,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
       <View style={{ flex: 1 }}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === 'ios' ? 'position' : 'height'}
         >
           <View
             style={[styles.container, {
@@ -236,7 +236,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
                                                      senderStyle={this.props.senderChatWindow}
                                                      myId={this.props.clientId || ''}
                                                      message={item}/>}
-              keyExtractor={(item) => `item!.id`}
+              keyExtractor={(item) => item!.id}
             />
             {this.props.sendButton?.showSendingIndicator && this.state.updateList ?
               <Loader colorIndicator={this.props.sendButton!.indicatorColor}/> : ''}
