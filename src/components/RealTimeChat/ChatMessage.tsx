@@ -62,7 +62,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
     return <></>
   }
 
-  const messageFormate = isMyMessage() ? message.message : message.message.replace(/【\d+:\d+†[^】]+】/g, '')
+  const messageFormate = isMyMessage() ? message.message : message.message.replace(/【\d+:\d+(?:-\d+)?†[^】]+】/g, '')
 
   return (
     <View style={[styles.container, {
