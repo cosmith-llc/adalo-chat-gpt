@@ -101,6 +101,7 @@ export interface RealTimeChatProps {
   senderChatWindow?: ISenderChatWindow;
   receivedChatWindow?: IReceivedChatWindow;
   adaloMessages?: IAdaloMessages[];
+  placeholder?: string;
   apiKey?: string;
   assistantId? :string;
   threadId?: string;

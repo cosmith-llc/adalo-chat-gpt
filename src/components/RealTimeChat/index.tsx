@@ -1,16 +1,8 @@
-import React, { Component, forwardRef } from "react";
-import {
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-  ActivityIndicator,
-  View,
-  StyleSheet,
-} from "react-native";
-import { ChatMessage } from "./ChatMessage";
-import { RealTimeChatProps } from "./generated";
-import { InputBox } from "./InputBox";
+import React, { Component } from 'react';
+import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, View, } from 'react-native';
+import { ChatMessage } from './ChatMessage';
+import { RealTimeChatProps } from './generated';
+import { InputBox } from './InputBox';
 // import * as Ably from "ably";
 import axios from 'axios';
 import scrollToEnd from './scrollToEnd';
@@ -20,9 +12,9 @@ import Loader from './Loader'
 const OPENAI_API_KEY = '';
 
 const headers = (API_KEY) => ({
-  "Content-Type": "application/json",
-  "Authorization": `Bearer ${API_KEY}`,
-  "OpenAI-Beta": "assistants=v2"
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${API_KEY}`,
+  'OpenAI-Beta': 'assistants=v2'
 });
 
 
@@ -31,8 +23,20 @@ const getLastMessage = async (API_KEY, thread_Id) => await axios.get(`https://ap
   headers: headers(API_KEY)
 });
 
-const convertMessages = (messages: { id: string; role: string; assistant_id: any; created_at: any; content: { text: { value: any; }; }[]; }[]) => {
-  return messages.reverse().map((message: { id: string; role: string; assistant_id: any; created_at: any; content: { text: { value: any; }; }[]; }) => ({
+const convertMessages = (messages: {
+  id: string;
+  role: string;
+  assistant_id: any;
+  created_at: any;
+  content: { text: { value: any; }; }[];
+}[]) => {
+  return messages.reverse().map((message: {
+    id: string;
+    role: string;
+    assistant_id: any;
+    created_at: any;
+    content: { text: { value: any; }; }[];
+  }) => ({
     id: message.id,
     role: message.role === 'user' ? 'user' : 'assistant',
     message: message.content[0].text.value,
@@ -40,27 +44,30 @@ const convertMessages = (messages: { id: string; role: string; assistant_id: any
   }));
 };
 
-class RealTimeChat extends Component<
-  RealTimeChatProps,
+class RealTimeChat extends Component<RealTimeChatProps,
   {
     messages: any[];
     oneTimeUpdate: boolean;
     updateList: boolean
     loaded: boolean;
     loading: boolean;
-  }
-> {
+  }> {
+
   constructor(props: RealTimeChatProps) {
     super(props);
-    const sampleMessages = [{
-      message: "First Message",
-      createdDate: new Date(),
-      senderId: this.props.clientId
-    }, {
-      message: "Second Message",
-      createdDate: new Date(),
-      senderId: `${this.props.clientId}+1`
-    }]
+    const sampleMessages = [
+      {
+        message: 'First Message',
+        createdDate: new Date(),
+        senderId: this.props.clientId
+      },
+      {
+        message: 'Second Message',
+        createdDate: new Date(),
+        senderId: `${this.props.clientId}+1`
+      }
+    ];
+
     this.state = {
       loading: false,
       loaded: false,
@@ -68,20 +75,34 @@ class RealTimeChat extends Component<
       messages: !!props.editor ? sampleMessages : this.props.adaloMessages?.map(message => message.messageData) || [],
       updateList: false
     };
+
     this.sendMessage = this.sendMessage.bind(this);
   }
+
   async sendMessage(message: string) {
     if (message) {
       this.setState({
-        messages: [...this.state.messages, { message: message, role: 'user', createdDate: new Date() }, { message: '', role: 'assistant', createdDate: new Date() }]
-      })
-      this.setState({ updateList: true })
+        messages: [
+          ...this.state.messages,
+          {
+            message: message,
+            role: 'user',
+            createdDate: new Date()
+          },
+          {
+            message: '',
+            role: 'assistant',
+            createdDate: new Date()
+          }
+        ]
+      });
+      this.setState({ updateList: true });
       setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
       const { apiKey, assistantId, threadId, fileId } = this.props;
 
       const data = {
-        "role": "user",
-        "content": message
+        'role': 'user',
+        'content': message
       };
       const urlSendMessage = `https://api.openai.com/v1/threads/${threadId}/messages`;
 
@@ -147,13 +168,12 @@ class RealTimeChat extends Component<
         readLoop();
       }
 
-
-
       if (this.props.onSend) {
         this.props.onSend(message)
       }
     }
   }
+
   async componentDidMount() {
     if (!this.props.editor) {
       const { apiKey, threadId } = this.props;
@@ -162,9 +182,9 @@ class RealTimeChat extends Component<
 
       const element = this.refs.flatList;
       setTimeout(() => scrollToEnd(element, this.state.messages.length), 150);
-
     }
   }
+
   async loadMessages(apiKey, threadId) {
     let messages = [];
     if (apiKey && threadId) {
@@ -176,13 +196,14 @@ class RealTimeChat extends Component<
     }
     this.setState({ messages: messages || [] })
   }
+
   componentDidUpdate(prevProps: RealTimeChatProps) {
     if (!this.props.editor) {
-
       if (this.state.messages.length === 0) {
         if (!this.state.loaded && !this.state.loading) {
           const { apiKey: prevApiKey, threadId: prevThreadId } = prevProps;
           const { apiKey, threadId } = this.props;
+
           if (apiKey !== prevApiKey || threadId !== prevThreadId) {
             this.loadMessages(apiKey, threadId);
           }
@@ -190,17 +211,13 @@ class RealTimeChat extends Component<
       }
     }
   }
-  componentWillUnmount() {
-    if (!this.props.editor) {
-      //
-    }
-  }
+
   render() {
     return (
       <View style={{ flex: 1 }}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
           <View
             style={[styles.container, {
@@ -213,11 +230,19 @@ class RealTimeChat extends Component<
               ref="flatList"
               style={{ flex: 1 }}
               data={this.state.messages}
-              renderItem={({ item }) => <ChatMessage urlAvatar={this.props.urlAvatar} isShowDataTime={this.props.isShowDataTime} receiverStyle={this.props.receivedChatWindow} senderStyle={this.props.senderChatWindow} myId={this.props.clientId || ''} message={item} />}
+              renderItem={({ item }) => <ChatMessage urlAvatar={this.props.urlAvatar}
+                                                     isShowDataTime={this.props.isShowDataTime}
+                                                     receiverStyle={this.props.receivedChatWindow}
+                                                     senderStyle={this.props.senderChatWindow}
+                                                     myId={this.props.clientId || ''}
+                                                     message={item}/>}
               keyExtractor={(item) => `item!.id`}
             />
-            {this.props.sendButton?.showSendingIndicator && this.state.updateList ? <Loader colorIndicator={this.props.sendButton!.indicatorColor} /> : ''}
-            <InputBox updateList={this.state.updateList} inputStyle={this.props.inputStyle} buttonStyles={this.props.sendButton} sendMessage={this.sendMessage} />
+            {this.props.sendButton?.showSendingIndicator && this.state.updateList ?
+              <Loader colorIndicator={this.props.sendButton!.indicatorColor}/> : ''}
+            <InputBox updateList={this.state.updateList} inputStyle={this.props.inputStyle}
+                      buttonStyles={this.props.sendButton} sendMessage={this.sendMessage}
+                      placeholder={this.props.placeholder}/>
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -227,9 +252,9 @@ class RealTimeChat extends Component<
 
 const styles = StyleSheet.create({
   wrapper: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   container: {
     backgroundColor: '#303030'

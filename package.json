@@ -1,10 +1,10 @@
 {
-  "name": "@cosmith/adalo-chat-gpt-tst",
-  "description": "Real-Time chat system for Adalo",
-  "version": "0.1.7",
+  "name": "@cosmith/adalo-chat-gpt",
+  "description": "ChatGPT for Adalo",
+  "version": "0.0.6",
   "main": "index.js",
   "license": "ISC",
-  "author": "Steven McKeown",
+  "author": "cosmith llc",
   "scripts": {
     "start": "tsc --watch & adalo dev",
     "build": "tsc",

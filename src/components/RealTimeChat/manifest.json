@@ -16,7 +16,13 @@
     {
       "name": "adaloMessages",
       "displayName": "List of Messages",
-      "type": "list"
+      "type": "list",
+      "hidden": true
+    },
+    {
+      "name": "placeholder",
+      "displayName": "Placeholder Text",
+      "type": "text"
     },
     {
       "name": "apiKey",
@@ -87,31 +93,31 @@
     },
     {
       "name": "urlAvatar",
-      "displayName": "Url Avatar Img",
+      "displayName": "Avatar",
       "props": [
         {
-          "name": "chatUrl",
-          "displayName": "Chat Url",
-          "type": "string",
-          "default": ""
-        },
-        {
           "name": "isShowChatUrl",
-          "displayName": "Show Chat Url",
+          "displayName": "Show chat url.",
           "type": "boolean",
-          "default": true
+          "default": false
         },
         {
-          "name": "userUrl",
-          "displayName": "User Url",
-          "type": "string",
+          "name": "chatUrl",
+          "displayName": "Chat image url.",
+          "type": "text",
           "default": ""
         },
         {
           "name": "isShowUserUrl",
-          "displayName": "Show USer Url",
+          "displayName": "Show user url.",
           "type": "boolean",
-          "default": true
+          "default": false
+        },
+        {
+          "name": "userUrl",
+          "displayName": "User image url.",
+          "type": "text",
+          "default": ""
         },
         {
           "name": "radiusAvatar",
