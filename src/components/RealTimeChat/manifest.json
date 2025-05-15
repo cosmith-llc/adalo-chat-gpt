@@ -5,7 +5,7 @@
   "resizeX": true,
   "resizeY": true,
   "components": "./index.js",
-  "icon": "./example-thumbnail.png",
+  "icon": "./thumbnail.png",
   "props": [
     {
       "name": "isShowDataTime",
