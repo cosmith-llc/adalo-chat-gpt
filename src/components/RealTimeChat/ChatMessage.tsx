@@ -42,7 +42,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
           height: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar * 2 : 20,
           borderRadius: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar : 10,
         }]}>
-          <Image source={{ uri: urlAvatar?.userUrl }} style={styles.imgAvatar}/>
+          <Image source={{ uri: urlAvatar?.userUrl }} style={styles.imgAvatar} />
         </View>
       )
 
@@ -54,7 +54,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
           height: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar * 2 : 20,
           borderRadius: props.urlAvatar?.radiusAvatar ? props.urlAvatar?.radiusAvatar : 10,
         }]}>
-          <Image source={{ uri: urlAvatar?.chatUrl }} style={styles.imgAvatar}/>
+          <Image source={{ uri: urlAvatar?.chatUrl }} style={styles.imgAvatar} />
         </View>
       )
     }
@@ -69,7 +69,7 @@ export const ChatMessage = (props: ChatMessageProps) => {
       // alignItems: isMyMessage() ? 'flex-end' : "flex-start",
       // flexDirection: isMyMessage() ? "row-reverse" : "row",
     }]}>
-      <ShowUrl/>
+      <ShowUrl />
       <View
         style={[
           styles.messageBox,
@@ -90,13 +90,13 @@ export const ChatMessage = (props: ChatMessageProps) => {
             body: {
               ...styles.message,
               color: isMyMessage() ? props.senderStyle?.textColor : props.receiverStyle?.textColor,
+              fontSize: isMyMessage() ? props.senderStyle?.fontSize : props.receiverStyle?.fontSize,
             }
           }}
         >
           {messageFormate}
         </Markdown>
-        {isShowDataTime ? <Text
-          style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textDataColor : props.receiverStyle?.textDataColor }]}>{formatTimeFromTimestamp(message.createdDate)}</Text> : ''}
+        {isShowDataTime ? <Text style={[styles.time, { color: isMyMessage() ? props.senderStyle?.textDataColor : props.receiverStyle?.textDataColor, }]}>{formatTimeFromTimestamp(message.createdDate)}</Text> : ''}
       </View>
     </View>
   );

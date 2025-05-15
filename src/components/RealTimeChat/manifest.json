@@ -216,6 +216,17 @@
           "default": "#424242"
         },
         {
+          "name": "fontSize",
+          "displayName": "Font Size",
+          "type": "number",
+          "default": 14,
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 100
+          }
+        },
+        {
           "name": "borderWidth",
           "displayName": "Border Width",
           "type": "number",
@@ -316,6 +327,17 @@
           "displayName": "Border Width",
           "type": "number",
           "default": 1,
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 100
+          }
+        },
+        {
+          "name": "fontSize",
+          "displayName": "Font Size",
+          "type": "number",
+          "default": 14,
           "control": {
             "type": "slider",
             "min": 1,
