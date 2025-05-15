@@ -191,7 +191,9 @@ class RealTimeChat extends Component<RealTimeChatProps,
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{
+        flex: 1
+      }}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === 'ios' ? 'position' : 'height'}
@@ -199,7 +201,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
           <View
             style={[styles.container, {
               height: this.props._height,
-              width: this.props._width,
+              width: '100%',
               backgroundColor: this.props.backgroundColor
             }]}
           >
@@ -209,11 +211,11 @@ class RealTimeChat extends Component<RealTimeChatProps,
               style={{ flex: 1 }}
               data={this.state.messages}
               renderItem={({ item }) => <ChatMessage urlAvatar={this.props.urlAvatar}
-                                                     isShowDataTime={this.props.isShowDataTime}
-                                                     receiverStyle={this.props.receivedChatWindow}
-                                                     senderStyle={this.props.senderChatWindow}
-                                                     myId={this.props.clientId || ''}
-                                                     message={item}/>}
+                isShowDataTime={this.props.isShowDataTime}
+                receiverStyle={this.props.receivedChatWindow}
+                senderStyle={this.props.senderChatWindow}
+                myId={this.props.clientId || ''}
+                message={item} />}
               keyExtractor={(item) => item!.id}
               initialNumToRender={50}
               onContentSizeChange={() => {
@@ -223,10 +225,10 @@ class RealTimeChat extends Component<RealTimeChatProps,
               }}
             />
             {this.props.sendButton?.showSendingIndicator && this.state.updateList ?
-              <Loader colorIndicator={this.props.sendButton!.indicatorColor}/> : ''}
+              <Loader colorIndicator={this.props.sendButton!.indicatorColor} /> : ''}
             <InputBox updateList={this.state.updateList} inputStyle={this.props.inputStyle}
-                      buttonStyles={this.props.sendButton} sendMessage={this.sendMessage}
-                      placeholder={this.props.placeholder}/>
+              buttonStyles={this.props.sendButton} sendMessage={this.sendMessage}
+              placeholder={this.props.placeholder} />
           </View>
         </KeyboardAvoidingView>
       </View>

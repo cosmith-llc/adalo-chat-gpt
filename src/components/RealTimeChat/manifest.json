@@ -1,7 +1,7 @@
 {
   "displayName": "RealTime Chat",
-  "defaultWidth": 160,
-  "defaultHeight": 24,
+  "defaultWidth": 400,
+  "defaultHeight": 550,
   "resizeX": true,
   "resizeY": true,
   "components": "./index.js",
