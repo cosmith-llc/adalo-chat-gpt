@@ -88,7 +88,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
         {
           message: message,
           role: 'user',
-          createdDate: new Date()
+          createdDate: (new Date()).getTime() / 1000
         },
         {
           message: '',
