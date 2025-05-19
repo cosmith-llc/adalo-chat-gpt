@@ -60,6 +60,7 @@ export interface IInputStyle {
   borderRadius?: number;
   backgroundColor?: string;
   indicatorColor?: string;
+  textInputColor?: string;
 }
 
 export interface ISenderChatWindow {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, View, } from 'react-native';
+import { FlatList, ScrollView, KeyboardAvoidingView, Platform, StyleSheet, View, } from 'react-native';
 import { ChatMessage } from './ChatMessage';
 import { RealTimeChatProps } from './generated';
 import { InputBox } from './InputBox';
@@ -93,7 +93,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
         {
           message: '',
           role: 'assistant',
-          createdDate: new Date()
+          createdDate: (new Date()).getTime() / 1000
         }
       ],
       updateList: true
@@ -208,9 +208,12 @@ class RealTimeChat extends Component<RealTimeChatProps,
             <FlatList
               ref="flatList"
               keyboardShouldPersistTaps="handled"
-              style={{ flex: 1 }}
+              style={{
+                flex: 1,
+              }}
+              contentContainerStyle={{ minWidth: "100%" }}
               data={this.state.messages}
-              renderItem={({ item }) => <ChatMessage urlAvatar={this.props.urlAvatar}
+              renderItem={({ item }) => <ChatMessage key={item.id} urlAvatar={this.props.urlAvatar}
                 isShowDataTime={this.props.isShowDataTime}
                 receiverStyle={this.props.receivedChatWindow}
                 senderStyle={this.props.senderChatWindow}
@@ -230,8 +233,8 @@ class RealTimeChat extends Component<RealTimeChatProps,
               buttonStyles={this.props.sendButton} sendMessage={this.sendMessage}
               placeholder={this.props.placeholder} />
           </View>
-        </KeyboardAvoidingView>
-      </View>
+        </KeyboardAvoidingView >
+      </View >
     );
   }
 }

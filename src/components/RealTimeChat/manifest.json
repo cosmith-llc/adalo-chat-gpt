@@ -158,6 +158,12 @@
           "default": "#424242"
         },
         {
+          "name": "textInputColor",
+          "displayName": "Text Color",
+          "type": "color",
+          "default": "#afafaf"
+        },
+        {
           "name": "borderWidth",
           "displayName": "Border Width",
           "type": "number",
