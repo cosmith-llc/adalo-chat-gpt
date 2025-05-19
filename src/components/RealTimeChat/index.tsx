@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, View, } from 'react-native';
+import { FlatList, ScrollView, KeyboardAvoidingView, Platform, StyleSheet, View, } from 'react-native';
 import { ChatMessage } from './ChatMessage';
 import { RealTimeChatProps } from './generated';
 import { InputBox } from './InputBox';
@@ -88,12 +88,12 @@ class RealTimeChat extends Component<RealTimeChatProps,
         {
           message: message,
           role: 'user',
-          createdDate: new Date()
+          createdDate: (new Date()).getTime() / 1000
         },
         {
           message: '',
           role: 'assistant',
-          createdDate: new Date()
+          createdDate: (new Date()).getTime() / 1000
         }
       ],
       updateList: true
@@ -191,7 +191,9 @@ class RealTimeChat extends Component<RealTimeChatProps,
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{
+        flex: 1
+      }}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === 'ios' ? 'position' : 'height'}
@@ -199,21 +201,24 @@ class RealTimeChat extends Component<RealTimeChatProps,
           <View
             style={[styles.container, {
               height: this.props._height,
-              width: this.props._width,
+              width: '100%',
               backgroundColor: this.props.backgroundColor
             }]}
           >
             <FlatList
               ref="flatList"
               keyboardShouldPersistTaps="handled"
-              style={{ flex: 1 }}
+              style={{
+                flex: 1,
+              }}
+              contentContainerStyle={{ minWidth: "100%" }}
               data={this.state.messages}
-              renderItem={({ item }) => <ChatMessage urlAvatar={this.props.urlAvatar}
-                                                     isShowDataTime={this.props.isShowDataTime}
-                                                     receiverStyle={this.props.receivedChatWindow}
-                                                     senderStyle={this.props.senderChatWindow}
-                                                     myId={this.props.clientId || ''}
-                                                     message={item}/>}
+              renderItem={({ item }) => <ChatMessage key={item.id} urlAvatar={this.props.urlAvatar}
+                isShowDataTime={this.props.isShowDataTime}
+                receiverStyle={this.props.receivedChatWindow}
+                senderStyle={this.props.senderChatWindow}
+                myId={this.props.clientId || ''}
+                message={item} />}
               keyExtractor={(item) => item!.id}
               initialNumToRender={50}
               onContentSizeChange={() => {
@@ -223,13 +228,13 @@ class RealTimeChat extends Component<RealTimeChatProps,
               }}
             />
             {this.props.sendButton?.showSendingIndicator && this.state.updateList ?
-              <Loader colorIndicator={this.props.sendButton!.indicatorColor}/> : ''}
+              <Loader colorIndicator={this.props.sendButton!.indicatorColor} /> : ''}
             <InputBox updateList={this.state.updateList} inputStyle={this.props.inputStyle}
-                      buttonStyles={this.props.sendButton} sendMessage={this.sendMessage}
-                      placeholder={this.props.placeholder}/>
+              buttonStyles={this.props.sendButton} sendMessage={this.sendMessage}
+              placeholder={this.props.placeholder} />
           </View>
-        </KeyboardAvoidingView>
-      </View>
+        </KeyboardAvoidingView >
+      </View >
     );
   }
 }

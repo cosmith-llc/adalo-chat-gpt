@@ -42,35 +42,37 @@ export const InputBox = ({
   const textInputStyles = Platform.OS === 'web' ? { borderColor: 'none', outline: 'none' } : {};
   return (
     <View style={[styles.container,
-      {
-        borderColor: inputStyle?.borderColor,
-        backgroundColor: inputStyle?.backgroundColor,
-        borderWidth: inputStyle?.borderWidth,
-        borderRadius: inputStyle?.borderRadius
-      }
+    {
+      borderColor: inputStyle?.borderColor,
+      backgroundColor: inputStyle?.backgroundColor,
+      borderWidth: inputStyle?.borderWidth,
+      borderRadius: inputStyle?.borderRadius
+    }
     ]}>
       <View style={styles.mainContainer}>
         <TextInput
           placeholder={placeholder ? placeholder : 'Type Message'}
           multiline
           //@ts-ignore
-          style={[styles.textInput, textInputStyles]}
+          style={[styles.textInput, textInputStyles, {
+            color: inputStyle?.textInputColor
+          }]}
           value={message}
           onChangeText={setMessage}
           editable={!updateList}
         />
       </View>
       <TouchableOpacity onPress={onPress} disabled={message.trim() === '' || sending}
-                        style={[
-                          styles.buttonContainer,
-                          (message.trim() === '' || sending) && { opacity: 0.5 }
-                        ]}>
+        style={[
+          styles.buttonContainer,
+          (message.trim() === '' || sending) && { opacity: 0.5 }
+        ]}>
         <View style={styles.buttonContainer}>
           {
             sending && buttonStyles?.showSendingIndicator
-              ? (<ActivityIndicator size="small" color={buttonStyles?.indicatorColor}/>)
+              ? (<ActivityIndicator size="small" color={buttonStyles?.indicatorColor} />)
               : (<Icon iconName={buttonStyles?.buttonIcon || 'send'}
-                       iconColor={buttonStyles?.buttonIconColor || styles.icons}/>)
+                iconColor={buttonStyles?.buttonIconColor || styles.icons} />)
           }
         </View>
       </TouchableOpacity>
