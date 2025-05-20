@@ -113,6 +113,9 @@ export interface RealTimeChatProps {
   channelName?: string;
   subscriptionKey?: string;
   onSend?: (Messages?: string) => void;
+  lastMessageGpt?: {
+    onChange: (Messages?: string) => void;
+  };
   backgroundColor?: string;
   appId: string;
   _fonts: IFonts;

@@ -8,6 +8,13 @@
   "icon": "./thumbnail.png",
   "props": [
     {
+      "name": "lastMessageGpt",
+      "displayName": "Last Message Text GPT",
+      "type": "text",
+      "role": "formValue",
+      "hidden": true
+    },
+    {
       "name": "isShowDataTime",
       "displayName": "Show data and time",
       "type": "boolean",
