@@ -88,8 +88,8 @@ class RealTimeChat extends Component<RealTimeChatProps,
 
     let gptMessage = messages.filter(e => e.role === "assistant")
     const lastMessage = gptMessage[gptMessage.length - 1].message.replace(/【\d+:\d+(?:-\d+)?†[^】]+】/g, '')
-    if (this.props.lastMessageGpt) {
-      this.props.lastMessageGpt.onChange(lastMessage)
+    if (this.props.onSendChatGpt) {
+      this.props.onSendChatGpt(lastMessage)
     }
   }
 
