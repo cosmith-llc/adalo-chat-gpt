@@ -61,6 +61,17 @@
       ]
     },
     {
+      "name": "onSendChatGpt",
+      "displayName": "Activated when a response comes from the chat gpt (update the database!).",
+      "type": "action",
+      "arguments": [
+        {
+          "displayName": "MessagesChatGpt",
+          "type": "text"
+        }
+      ]
+    },
+    {
       "name": "backgroundColor",
       "displayName": "Background Color",
       "type": "color",
