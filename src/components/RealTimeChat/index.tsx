@@ -86,8 +86,9 @@ class RealTimeChat extends Component<RealTimeChatProps,
     createdDate: any;
   }[]) {
 
-    let gptMessage = messages.filter(e => e.role === "assistant")
-    const lastMessage = gptMessage[gptMessage.length - 1].message.replace(/【\d+:\d+(?:-\d+)?†[^】]+】/g, '')
+    let gptMessage = messages.filter(e => e.role === 'assistant');
+    const lastMessage = gptMessage[gptMessage.length - 1].message.replace(/【\d+:\d+(?:-\d+)?†[^】]+】/g, '');
+
     if (this.props.onSendChatGpt) {
       this.props.onSendChatGpt(lastMessage)
     }
@@ -118,6 +119,10 @@ class RealTimeChat extends Component<RealTimeChatProps,
     const { apiKey, assistantId, threadId } = this.props;
 
     try {
+      if (this.props.onSend) {
+        await this.props.onSend(message);
+      }
+
       await axios.post(`https://api.openai.com/v1/threads/${threadId}/messages`, {
         role: 'user',
         content: message
@@ -156,9 +161,6 @@ class RealTimeChat extends Component<RealTimeChatProps,
         this.setState({ updateList: false });
       }
 
-      if (this.props.onSend) {
-        this.props.onSend(message);
-      }
 
     } catch (err) {
       console.error('Error during sendMessage:', err);
@@ -186,7 +188,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
       //@ts-ignore
       messages = convertMessages(lastMessage.data.data);
     }
-    this.updateLasMessage(messages)
+
     this.setState({ messages: messages || [] })
   }
 
@@ -231,11 +233,11 @@ class RealTimeChat extends Component<RealTimeChatProps,
               contentContainerStyle={{ minWidth: '100%' }}
               data={this.state.messages}
               renderItem={({ item }) => <ChatMessage key={item.id} urlAvatar={this.props.urlAvatar}
-                isShowDataTime={this.props.isShowDataTime}
-                receiverStyle={this.props.receivedChatWindow}
-                senderStyle={this.props.senderChatWindow}
-                myId={this.props.clientId || ''}
-                message={item} />}
+                                                     isShowDataTime={this.props.isShowDataTime}
+                                                     receiverStyle={this.props.receivedChatWindow}
+                                                     senderStyle={this.props.senderChatWindow}
+                                                     myId={this.props.clientId || ''}
+                                                     message={item}/>}
               keyExtractor={(item) => item!.id}
               initialNumToRender={50}
               onContentSizeChange={() => {
@@ -245,10 +247,10 @@ class RealTimeChat extends Component<RealTimeChatProps,
               }}
             />
             {this.props.sendButton?.showSendingIndicator && this.state.updateList ?
-              <Loader colorIndicator={this.props.sendButton!.indicatorColor} /> : ''}
+              <Loader colorIndicator={this.props.sendButton!.indicatorColor}/> : ''}
             <InputBox updateList={this.state.updateList} inputStyle={this.props.inputStyle}
-              buttonStyles={this.props.sendButton} sendMessage={this.sendMessage}
-              placeholder={this.props.placeholder} />
+                      buttonStyles={this.props.sendButton} sendMessage={this.sendMessage}
+                      placeholder={this.props.placeholder}/>
           </View>
         </KeyboardAvoidingView>
       </View>
