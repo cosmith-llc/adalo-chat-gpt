@@ -55,7 +55,6 @@ class RealTimeChat extends Component<RealTimeChatProps,
 
   constructor(props: RealTimeChatProps) {
     super(props);
-    console.log(props._screenHeight)
     const sampleMessages = [
       {
         message: 'First Message',
