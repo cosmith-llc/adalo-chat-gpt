@@ -218,7 +218,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
         >
           <View
             style={[styles.container, {
-              height: this.props._height,
+              height: this.props._screenHeight,
               width: '100%',
               backgroundColor: this.props.backgroundColor
             }]}
@@ -226,7 +226,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
             <FlatList
               ref="flatList"
               keyboardShouldPersistTaps="handled"
-              nestedScrollEnabled={true}
+              nestedScrollEnabled={Platform.OS === 'android' ? true : undefined}
               style={{
                 flex: 1,
               }}
