@@ -119,6 +119,7 @@ export interface RealTimeChatProps {
   _fonts: IFonts;
   _width: number;
   _height: number;
+  _screenHeight: number;
   editor: boolean;
   isShowDataTime: boolean;
 }
