@@ -51,7 +51,7 @@
     },
     {
       "name": "onSend",
-      "displayName": "Triggered when messages is sent (update the database!)",
+      "displayName": "Triggered when messages is sent.",
       "type": "action",
       "arguments": [
         {
@@ -62,7 +62,7 @@
     },
     {
       "name": "onSendChatGpt",
-      "displayName": "Activated when a response comes from the chat gpt (update the database!).",
+      "displayName": "Activated when a response comes from the chat gpt.",
       "type": "action",
       "arguments": [
         {
@@ -73,7 +73,7 @@
     },
     {
       "name": "onPressBack",
-      "displayName": "Triggered when press on back button. (update the database!)",
+      "displayName": "Triggered when press on back button.",
       "type": "action"
     },
     {
