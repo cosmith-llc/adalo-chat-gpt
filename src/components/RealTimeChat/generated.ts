@@ -49,6 +49,7 @@ export interface ISendButton {
 export interface IBackButton {
   buttonIcon?: string;
   buttonIconColor?: string;
+  iconSize?: number;
 }
 
 export interface IUrlAvatar {

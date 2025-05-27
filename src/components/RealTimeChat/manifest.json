@@ -169,14 +169,25 @@
       "props": [
         {
           "name": "buttonIcon",
-          "displayName": "Button Icon",
+          "displayName": "Icon",
           "type": "icon",
           "defaultValue": "arrow-back-ios"
         },
         {
           "name": "buttonIconColor",
-          "displayName": "Button Icon Color",
+          "displayName": "Icon Color",
           "type": "color"
+        },
+        {
+          "name": "iconSize",
+          "displayName": "Icon Size",
+          "type": "number",
+          "default": 24,
+          "control": {
+            "type": "slider",
+            "min": 1,
+            "max": 70
+          }
         }
       ]
     },

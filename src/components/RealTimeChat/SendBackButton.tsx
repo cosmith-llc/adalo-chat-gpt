@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from '@protonapp/material-components/src/Icon'
 import { IBackButton } from './generated';
 
@@ -19,14 +19,15 @@ const SendBackButton = ({ backButton, backgroundColor, actionBack }: InputBoxPro
   return (
     <View style={[styles.container, {
       backgroundColor: backgroundColor
-    }]} >
+    }]}>
       <TouchableOpacity onPress={onPress}
-        style={[
-          styles.buttonContainer,
-        ]}>
+                        style={[
+                          styles.buttonContainer,
+                        ]}>
         <View style={styles.buttonContainer}>
           <Icon iconName={backButton?.buttonIcon || 'arrow-back-ios'}
-            iconColor={backButton?.buttonIconColor || styles.icons} />
+                iconColor={backButton?.buttonIconColor || styles.icons}
+                iconSize={backButton?.iconSize || 24}/>
         </View>
       </TouchableOpacity>
     </View>
@@ -38,12 +39,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    padding: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
-    marginTop: 5,
-    marginBottom: 5,
-
+    marginVertical: 5,
+    paddingHorizontal: 5
   },
   buttonContainer: {
     borderRadius: 25,
