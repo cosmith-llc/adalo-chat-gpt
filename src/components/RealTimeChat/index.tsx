@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, View, } from 'react-native';
+import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, View, SafeAreaView } from 'react-native';
 import { ChatMessage } from './ChatMessage';
 import { RealTimeChatProps } from './generated';
 import { InputBox } from './InputBox';
@@ -7,6 +7,7 @@ import { InputBox } from './InputBox';
 import axios from 'axios';
 import scrollToEnd from './scrollToEnd';
 import Loader from './Loader'
+import SendBackButton from './SendBackButton';
 
 // Get from Component properties
 const OPENAI_API_KEY = '';
@@ -73,7 +74,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
       loaded: false,
       oneTimeUpdate: (this.props.adaloMessages?.length || 0) > 0,
       messages: !!props.editor ? sampleMessages : this.props.adaloMessages?.map(message => message.messageData) || [],
-      updateList: false
+      updateList: false,
     };
 
     this.sendMessage = this.sendMessage.bind(this);
@@ -111,7 +112,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
           createdDate: (new Date()).getTime() / 1000
         }
       ],
-      updateList: true
+      updateList: true,
     });
 
     setTimeout(() => scrollToEnd(this.refs.flatList, this.state.messages.length), 150);
@@ -209,51 +210,55 @@ class RealTimeChat extends Component<RealTimeChatProps,
 
   render() {
     return (
-      <View style={{
-        flex: 1
-      }}>
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === 'ios' ? 'position' : 'height'}
-        >
-          <View
-            style={[styles.container, {
-              height: this.props._screenHeight,
-              width: '100%',
-              backgroundColor: this.props.backgroundColor
-            }]}
+      <SafeAreaView>
+        <View style={{
+          flex: 1,
+        }}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'position' : 'height'}
           >
-            <FlatList
-              ref="flatList"
-              keyboardShouldPersistTaps="handled"
-              nestedScrollEnabled={Platform.OS === 'android' ? true : undefined}
-              style={{
-                flex: 1,
-              }}
-              contentContainerStyle={{ minWidth: '100%' }}
-              data={this.state.messages}
-              renderItem={({ item }) => <ChatMessage key={item.id} urlAvatar={this.props.urlAvatar}
-                                                     isShowDataTime={this.props.isShowDataTime}
-                                                     receiverStyle={this.props.receivedChatWindow}
-                                                     senderStyle={this.props.senderChatWindow}
-                                                     myId={this.props.clientId || ''}
-                                                     message={item}/>}
-              keyExtractor={(item) => item!.id}
-              initialNumToRender={50}
-              onContentSizeChange={() => {
-                if (this.state.messages.length > 0) {
-                  scrollToEnd(this.refs.flatList, this.state.messages.length);
-                }
-              }}
-            />
-            {this.props.sendButton?.showSendingIndicator && this.state.updateList ?
-              <Loader colorIndicator={this.props.sendButton!.indicatorColor}/> : ''}
-            <InputBox updateList={this.state.updateList} inputStyle={this.props.inputStyle}
-                      buttonStyles={this.props.sendButton} sendMessage={this.sendMessage}
-                      placeholder={this.props.placeholder}/>
-          </View>
-        </KeyboardAvoidingView>
-      </View>
+            <View
+              style={[styles.container, {
+                height: this.props._screenHeight,
+                width: '100%',
+                backgroundColor: this.props.backgroundColor,
+                paddingBottom: 70,
+              }]}
+            >
+              <SendBackButton actionBack={this.props.onPressBack} backButton={this.props.backButton} backgroundColor={this.props.backgroundColor} />
+              <FlatList
+                ref="flatList"
+                keyboardShouldPersistTaps="handled"
+                nestedScrollEnabled={Platform.OS === 'android' ? true : undefined}
+                style={{
+                  flex: 1,
+                }}
+                contentContainerStyle={{ minWidth: '100%' }}
+                data={this.state.messages}
+                renderItem={({ item }) => <ChatMessage key={item.id} urlAvatar={this.props.urlAvatar}
+                  isShowDataTime={this.props.isShowDataTime}
+                  receiverStyle={this.props.receivedChatWindow}
+                  senderStyle={this.props.senderChatWindow}
+                  myId={this.props.clientId || ''}
+                  message={item} />}
+                keyExtractor={(item) => item!.id}
+                initialNumToRender={50}
+                onContentSizeChange={() => {
+                  if (this.state.messages.length > 0) {
+                    scrollToEnd(this.refs.flatList, this.state.messages.length);
+                  }
+                }}
+              />
+              {this.props.sendButton?.showSendingIndicator && this.state.updateList ?
+                <Loader colorIndicator={this.props.sendButton!.indicatorColor} /> : ''}
+              <InputBox updateList={this.state.updateList} inputStyle={this.props.inputStyle}
+                buttonStyles={this.props.sendButton} sendMessage={this.sendMessage}
+                placeholder={this.props.placeholder} />
+            </View>
+          </KeyboardAvoidingView>
+        </View>
+      </SafeAreaView>
     );
   }
 }
@@ -265,7 +270,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    backgroundColor: '#303030'
+    backgroundColor: '#303030',
   }
 });
 

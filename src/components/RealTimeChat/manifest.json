@@ -72,6 +72,11 @@
       ]
     },
     {
+      "name": "onPressBack",
+      "displayName": "Triggered when press on back button. (update the database!)",
+      "type": "action"
+    },
+    {
       "name": "backgroundColor",
       "displayName": "Background Color",
       "type": "color",
@@ -155,6 +160,23 @@
           "enabled": {
             "showSendingIndicator": true
           }
+        }
+      ]
+    },
+    {
+      "name": "backButton",
+      "displayName": "Back Button",
+      "props": [
+        {
+          "name": "buttonIcon",
+          "displayName": "Button Icon",
+          "type": "icon",
+          "defaultValue": "arrow-back-ios"
+        },
+        {
+          "name": "buttonIconColor",
+          "displayName": "Button Icon Color",
+          "type": "color"
         }
       ]
     },

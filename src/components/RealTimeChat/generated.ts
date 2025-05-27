@@ -46,6 +46,11 @@ export interface ISendButton {
   indicatorColor?: string;
 }
 
+export interface IBackButton {
+  buttonIcon?: string;
+  buttonIconColor?: string;
+}
+
 export interface IUrlAvatar {
   chatUrl?: string;
   isShowChatUrl?: boolean;
@@ -98,6 +103,7 @@ export interface IAdaloMessages {
 }
 
 export interface RealTimeChatProps {
+  backButton?: IBackButton;
   sendButton?: ISendButton;
   urlAvatar?: IUrlAvatar;
   inputStyle?: IInputStyle;
@@ -114,6 +120,7 @@ export interface RealTimeChatProps {
   subscriptionKey?: string;
   onSend?: (Messages?: string) => void;
   onSendChatGpt?: (MessagesChatGpt?: string) => void;
+  onPressBack: () => void;
   backgroundColor?: string;
   appId: string;
   _fonts: IFonts;
