@@ -216,7 +216,7 @@ class RealTimeChat extends Component<RealTimeChatProps,
         }}>
           <KeyboardAvoidingView
             style={{ flex: 1 }}
-            behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+            behavior={'position'}
           >
             <View
               style={[styles.container, {
